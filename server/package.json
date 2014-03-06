@@ -1,0 +1,8 @@
+{
+  "name": "j7",
+  "description": "Jester's Sevens Game Server",
+  "version": "0.1.0",
+  "dependencies": {
+    "express": "~3"
+  }
+}

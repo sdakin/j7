@@ -1,0 +1,49 @@
+.gametable {
+	display: inline-block;
+}
+
+.board {
+	display: table;
+	border: solid 1px;
+}
+
+.row {
+	display: table-row;
+}
+
+.cell {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	width: 40px;
+	height: 40px;
+	cursor: default;
+}
+
+.validcell {
+	background-color: cornsilk;
+}
+
+.validcell:hover {
+	background-color: aliceblue;
+}
+
+.playedcell {
+	color: white;
+	background-color: blue;
+}
+
+.roll {
+	display: table;
+	margin: auto;
+}
+
+.wheel {
+	display: table-cell;
+	font-size: 24px;
+	text-align: center;
+	vertical-align: middle;
+	width: 64px;
+	height: 64px;
+	cursor: default;
+}

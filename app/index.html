@@ -5,6 +5,15 @@
 </head>
 <body>
 	<p>Welcome to Jester's Sevens!</p>
+	<div id="modalOverlay">
+		<div id="selectWheel">
+			<button id="btnWheel1" type="button" class="btn btn-default">1</button>
+			<button id="btnWheel2" type="button" class="btn btn-default">2</button>
+			<button id="btnWheel3" type="button" class="btn btn-default">3</button>
+		</div>
+		<div id="selectPrompt"></div>
+		<button id="btnCancel" type="button" class="btn btn-default">Cancel</button>
+	</div>
 	<div class="gametable">
 		<div class="board">
 			<div class="row">
@@ -45,6 +54,10 @@
 		<div id="controlArea">
 			<div class="inGameControls">
 				<button id="btnSpin" type="button" class="btn btn-default">Spin</button>
+				<button id="btnDouble" type="button" class="btn btn-default">Double</button>
+				<button id="btnInc" type="button" class="btn btn-default">+1</button>
+				<button id="btnDec" type="button" class="btn btn-default">-1</button>
+				<button id="btnBust" type="button" class="btn btn-default">Bust</button>
 			</div>
 			<div class="gameOverControls" style="display:none">
 				<button id="btnNewGame" type="button" class="btn btn-default">New Game</button>

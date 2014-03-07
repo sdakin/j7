@@ -32,7 +32,8 @@ define(
     J7App.prototype.init = function() {
         var self = this;
 
-        $("#btnSpin").click(function(e) { self.onSpin(); });
+        self.selectWheelOverlay = new SelectWheelOverlay(self);
+        $(".inGameControls button").click(function(e) { self.onGameControlClick(e); });
         $("#btnNewGame").click(function(e) { self.onNewGame(); });
 
         self.onSpin();
@@ -77,16 +78,6 @@ define(
             checkCells([0,1,2]);
         }
 
-        self.setValidCells();
-    };
-
-    J7App.prototype.onSpin = function() {
-        var self = this;
-        // TODO: move this to the server so the user can't modify it
-        $(".wheel").each(function(index, wheel) {
-            var spin = Math.ceil(Math.random() * 7);
-            self.setWheel(index, spin);
-        });
         self.setValidCells();
     };
 
@@ -151,6 +142,86 @@ define(
             this.wheels[index].used = true;
         }
     }
+
+
+    // ---------- Game Controls ----------
+
+    J7App.prototype.onGameControlClick = function(e) {
+        var self = this, buttonTitle = $(e.target).text().toLowerCase();
+        switch (buttonTitle) {
+            case "spin":
+                self.onSpin(); break;
+            case "double":
+            case "+1":
+            case "-1":
+            case "bust":
+                self.selectWheelOverlay.show(buttonTitle);
+                break;
+        }
+    };
+
+    J7App.prototype.onSpin = function() {
+        var self = this;
+        // TODO: move this to the server so the user can't modify it
+        $(".wheel").each(function(index, wheel) {
+            var spin = Math.ceil(Math.random() * 7);
+            self.setWheel(index, spin);
+        });
+        self.setValidCells();
+    };
+
+
+    // ---------- Select Wheel Overlay ----------
+
+    function SelectWheelOverlay(initApp) {
+        var self = this;
+
+        self.app = initApp;
+        self.$overlay = $("#modalOverlay");
+        $("#btnCancel").click(function(e) { self.hide(); });
+        $("#selectWheel button").click(function(e) { self.onSelectWheel(e); });
+    }
+
+    SelectWheelOverlay.prototype.onSelectWheel = function(e) {
+        var self = this;
+        var index = parseInt($(e.target).attr("id").substr(8)) - 1;
+        var $selector = $("#selectWheel");
+        var $wheels = $(".wheel"), $wheelSelectors = $selector.children();
+        var curVal = parseInt($($wheels[index]).text());
+
+        switch (self.mode) {
+            case "double":
+                curVal *= 2; break;
+            case "+1":
+                curVal++; break;
+            case "-1":
+                curVal--; break;
+        }
+        self.app.setWheel(index, curVal);
+        $($wheelSelectors[index]).text(curVal);
+        self.hide();
+    };
+
+    SelectWheelOverlay.prototype.hide = function() {
+        this.$overlay.hide();
+    };
+
+    // TODO: disable buttons for wheels that are already used
+    SelectWheelOverlay.prototype.show = function (type) {
+        var self = this;
+        self.mode = type;
+        var $board = $(".board"), boardPos = $board.offset(),
+            boardWidth = $board.outerWidth(), boardHeight = $board.outerHeight();
+        var $selector = $("#selectWheel");
+        var $wheelSelectors = $selector.children(), $wheels = $(".wheel");
+
+        $("#selectPrompt").text("Select wheel to " + type);
+        $selector.width(boardWidth);
+        for (var i = 0 ; i < self.app.numWheels ; i++) {
+            $($wheelSelectors[i]).text($($wheels[i]).text());
+        }
+        this.$overlay.show();
+    };
 
     return J7App;
 });

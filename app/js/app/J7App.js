@@ -32,6 +32,7 @@ define(
     J7App.prototype.init = function() {
         var self = this;
 
+        self.stats = { spins:0 };
         self.selectWheelOverlay = new SelectWheelOverlay(self);
         $(".inGameControls button").click(function(e) { self.onGameControlClick(e); });
         $("#btnNewGame").click(function(e) { self.onNewGame(); });
@@ -111,12 +112,13 @@ define(
                     wheelsUsed++;
             });
 
-            // the game is over if there are no valid cells and all wheels have not been used
-            if (wheelsUsed != this.numWheels) {
+            // the game is over when all cells have been played
+            var playedCells = $(".playedcell").length;
+            if (playedCells == $(".cell").length) {
                 var $gameControls = $("#controlArea").children();
                 $gameControls.first().hide();
                 $gameControls.last().show();
-            } else {
+            } else if (wheelsUsed == self.numWheels) {
                 self.onSpin();
             }
         } else {
@@ -168,6 +170,27 @@ define(
             self.setWheel(index, spin);
         });
         self.setValidCells();
+        self.stats.spins++;
+        self.updateStats();
+    };
+
+    J7App.prototype.updateStats = function() {
+        var self = this;
+        var $statsUI = $("#gameStats"); $statsUI.empty();
+        var statNames = ["spins", "doubles", "increments", "decrements"];
+        statNames.forEach(function(name) {
+            var $statLine = $('<div class="statLine"></div>');
+            $statLine.append($('<div class="statName">' + name + '</div><div class="statVal">' +
+                (self.stats[name] || 0) + '</div>'));
+            $statsUI.append($statLine);
+        });
+    };
+
+    J7App.prototype.useAdjustment = function(type) {
+        if (this.stats[type] === undefined)
+            this.stats[type] = 0;
+        this.stats[type] += 1;
+        this.updateStats();
     };
 
 
@@ -191,15 +214,16 @@ define(
 
         switch (self.mode) {
             case "double":
-                curVal *= 2; break;
+                curVal *= 2; self.app.useAdjustment("doubles"); break;
             case "+1":
-                curVal++; break;
+                curVal++; self.app.useAdjustment("increments"); break;
             case "-1":
-                curVal--; break;
+                curVal--; self.app.useAdjustment("decrements"); break;
         }
         self.app.setWheel(index, curVal);
         $($wheelSelectors[index]).text(curVal);
         self.hide();
+        self.app.setValidCells();
     };
 
     SelectWheelOverlay.prototype.hide = function() {

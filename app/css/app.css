@@ -52,6 +52,24 @@
 	color:lightgray;
 }
 
+#gameStats {
+	padding-top: 10px;
+}
+
+.statLine {
+	display: table-row;
+}
+
+.statName {
+	display: table-cell;
+}
+
+.statVal {
+	display: table-cell;
+	padding: 1px 5px;
+	text-align: right;
+}
+
 #modalOverlay {
 	display:none;
 	position: absolute;

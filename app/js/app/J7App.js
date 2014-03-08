@@ -32,12 +32,11 @@ define(
     J7App.prototype.init = function() {
         var self = this;
 
-        self.stats = { spins:0 };
         self.selectWheelOverlay = new SelectWheelOverlay(self);
         $(".inGameControls button").click(function(e) { self.onGameControlClick(e); });
         $("#btnNewGame").click(function(e) { self.onNewGame(); });
 
-        self.onSpin();
+        self.onNewGame();
     };
 
     J7App.prototype.getCell = function(value) {
@@ -45,11 +44,21 @@ define(
     };
 
     J7App.prototype.onNewGame = function(e) {
+        var self = this;
+        self.stats = { spins:0 };
         $(".cell").removeClass("playedcell");
         var $gameControls = $("#controlArea").children();
         $gameControls.last().hide();
         $gameControls.first().show();
-        this.onSpin();
+        self.onSpin();
+    };
+
+    J7App.prototype.onGameOver = function() {
+        var $gameControls = $("#controlArea").children();
+        $gameControls.first().hide();
+        $gameControls.last().show();
+
+        // TODO: save the stats
     };
 
     J7App.prototype.onCellClick = function(e) {
@@ -115,9 +124,7 @@ define(
             // the game is over when all cells have been played
             var playedCells = $(".playedcell").length;
             if (playedCells == $(".cell").length) {
-                var $gameControls = $("#controlArea").children();
-                $gameControls.first().hide();
-                $gameControls.last().show();
+                self.onGameOver();
             } else if (wheelsUsed == self.numWheels) {
                 self.onSpin();
             }

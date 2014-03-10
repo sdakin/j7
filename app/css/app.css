@@ -21,11 +21,11 @@
 }
 
 .validcell {
-	background-color: cornsilk;
+	background-color: lavender;
 }
 
 .validcell:hover {
-	background-color: aliceblue;
+	background-color: lightblue;
 }
 
 .playedcell {

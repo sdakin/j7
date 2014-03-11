@@ -16,32 +16,32 @@
 	</div>
 	<div class="gametable">
 		<div class="board">
-			<div class="row">
-				<div class="cell" data-val="15">15</div>
-				<div class="cell" data-val="16">16</div>
-				<div class="cell" data-val="17">17</div>
-				<div class="cell" data-val="18">18</div>
-				<div class="cell" data-val="19">19</div>
-				<div class="cell" data-val="20">20</div>
-				<div class="cell" data-val="21">21</div>
+			<div class="boardRow">
+				<div class="boardCell" data-val="15">15</div>
+				<div class="boardCell" data-val="16">16</div>
+				<div class="boardCell" data-val="17">17</div>
+				<div class="boardCell" data-val="18">18</div>
+				<div class="boardCell" data-val="19">19</div>
+				<div class="boardCell" data-val="20">20</div>
+				<div class="boardCell" data-val="21">21</div>
 			</div>
-			<div class="row">
-				<div class="cell" data-val="8">8</div>
-				<div class="cell" data-val="9">9</div>
-				<div class="cell" data-val="10">10</div>
-				<div class="cell" data-val="11">11</div>
-				<div class="cell" data-val="12">12</div>
-				<div class="cell" data-val="13">13</div>
-				<div class="cell" data-val="14">14</div>
+			<div class="boardRow">
+				<div class="boardCell" data-val="8">8</div>
+				<div class="boardCell" data-val="9">9</div>
+				<div class="boardCell" data-val="10">10</div>
+				<div class="boardCell" data-val="11">11</div>
+				<div class="boardCell" data-val="12">12</div>
+				<div class="boardCell" data-val="13">13</div>
+				<div class="boardCell" data-val="14">14</div>
 			</div>
-			<div class="row">
-				<div class="cell" data-val="1">1</div>
-				<div class="cell" data-val="2">2</div>
-				<div class="cell" data-val="3">3</div>
-				<div class="cell" data-val="4">4</div>
-				<div class="cell" data-val="5">5</div>
-				<div class="cell" data-val="6">6</div>
-				<div class="cell" data-val="7">7</div>
+			<div class="boardRow">
+				<div class="boardCell" data-val="1">1</div>
+				<div class="boardCell" data-val="2">2</div>
+				<div class="boardCell" data-val="3">3</div>
+				<div class="boardCell" data-val="4">4</div>
+				<div class="boardCell" data-val="5">5</div>
+				<div class="boardCell" data-val="6">6</div>
+				<div class="boardCell" data-val="7">7</div>
 			</div>
 		</div>
 		<div class "rollarea">
@@ -53,11 +53,16 @@
 		</div>
 		<div id="controlArea">
 			<div class="inGameControls">
-				<button id="btnSpin" type="button" class="btn btn-default">Spin</button>
-				<button id="btnDouble" type="button" class="btn btn-default">Double</button>
-				<button id="btnInc" type="button" class="btn btn-default">+1</button>
-				<button id="btnDec" type="button" class="btn btn-default">-1</button>
-				<button id="btnBust" type="button" class="btn btn-default">Bust</button>
+				<div>
+					<button id="btnSpin" type="button" class="btn btn-primary btn-sm">Respin</button>
+					<button id="btnDouble" type="button" class="btn btn-primary btn-sm">Double</button>
+					<button id="btnInc" type="button" class="btn btn-primary btn-sm">+1</button>
+					<button id="btnDec" type="button" class="btn btn-primary btn-sm">-1</button>
+					<button id="btnBust" type="button" class="btn btn-primary btn-sm">Bust</button>
+				</div>
+				<div style="padding-top:10px">
+					<button id="btnPass" type="button" class="btn btn-success btn-sm">Pass</button>
+				</div>
 			</div>
 			<div class="gameOverControls" style="display:none">
 				<button id="btnNewGame" type="button" class="btn btn-default">New Game</button>

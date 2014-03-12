@@ -80,6 +80,24 @@
 	text-align: right;
 }
 
+.bonusRow {
+	display: table-row;
+}
+
+.bonusRow>div {
+	display: table-cell;
+}
+
+#bonusesEarned {
+	padding-left: 5px;
+	text-align: right;
+}
+
+#bonusesUsed {
+	padding-left: 5px;
+	text-align: right;
+}
+
 #modalOverlay {
 	display:none;
 	position: absolute;

@@ -105,6 +105,43 @@ define(
             $("#btnPass").attr("disabled", "disabled");
     };
 
+    J7App.prototype.countBonuses = function() {
+        var self = this;
+        var $cells = $(".boardCell");
+        var i, result = { bonusesEarned: 0, bonusesUsed: 0 };
+
+        function cellPlayed(index) {
+            var $cell = $(".boardcell[data-val='" + (index + 1) + "']");
+            return $cell.hasClass("playedcell");
+        }
+
+        // count filled columns
+        for (i = 0 ; i < 7 ; i++) {
+            if (cellPlayed(i) && cellPlayed(i + 7) && cellPlayed(i + 14))
+                result.bonusesEarned++;
+        }
+
+        // count filled rows
+        for (i = 0 ; i < 3 ; i++) {
+            console.log("checking filled row: " + i)
+            var count = 0;
+            for (var j = i * 7 ; j < (i + 1) * 7 ; j++) {
+                if (cellPlayed(j))
+                    count++;
+            }
+            console.log("filled count: " + count);
+            if (count == 7)
+                result.bonusesEarned++;
+        }
+
+        var bonusNames = ["respins", "doubles", "increments", "decrements", "busts"];
+        bonusNames.forEach(function(name) {
+            result.bonusesUsed += (self.stats[name] || 0);
+        });
+
+        return result;
+    };
+
     J7App.prototype.setValidCells = function() {
         var self = this;
         $(".boardCell").unbind("click");
@@ -169,6 +206,16 @@ define(
 
     // ---------- Game Controls ----------
 
+    J7App.prototype.enableGameControls = function(flag) {
+        var $controls = $("#controlArea .inGameControls .adjustments button");
+        $controls.each(function(index, button) {
+            if (flag)
+                $(button).removeAttr("disabled");
+            else
+                $(button).attr("disabled", "disabled");
+        });
+    };
+
     J7App.prototype.onGameControlClick = function(e) {
         var self = this, buttonTitle = $(e.target).text().toLowerCase();
         switch (buttonTitle) {
@@ -211,25 +258,27 @@ define(
         var self = this;
         var $statsUI = $("#gameStats"); $statsUI.empty();
         var statNames = ["spins", "passes", "respins", "doubles", "increments", "decrements", "busts"];
+        var $statLine;
+
         statNames.forEach(function(name) {
             var $statLine = $('<div class="statLine"></div>');
             $statLine.append($('<div class="statName">' + name + '</div><div class="statVal">' +
                 (self.stats[name] || 0) + '</div>'));
             $statsUI.append($statLine);
         });
+
+        var bonusStats = self.countBonuses();
+        $("#bonusesEarned").text(bonusStats.bonusesEarned);
+        $("#bonusesUsed").text(bonusStats.bonusesUsed);
+        self.enableGameControls(bonusStats.bonusesEarned > bonusStats.bonusesUsed);
     };
 
     J7App.prototype.useAdjustment = function(type) {
         var self = this;
-        self.useBonus();
         if (self.stats[type] === undefined)
             self.stats[type] = 0;
         self.stats[type] += 1;
         self.updateStats();
-    };
-
-    J7App.prototype.useBonus = function() {
-        console.log("TODO: using bonus...")
     };
 
 
@@ -280,7 +329,6 @@ define(
         this.$overlay.hide();
     };
 
-    // TODO: disable buttons for wheels that are already used
     SelectWheelOverlay.prototype.show = function (type) {
         var self = this;
         self.mode = type;
@@ -293,6 +341,8 @@ define(
         $selector.width(boardWidth);
         for (var i = 0 ; i < self.app.numWheels ; i++) {
             $($wheelSelectors[i]).text($($wheels[i]).text());
+            
+            // disable buttons for wheels that are already used
             if (self.app.wheels[i].used)
                 $($wheelSelectors[i]).attr("disabled", "disabled");
             else

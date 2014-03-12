@@ -90,6 +90,7 @@ define(
         }
 
         self.setValidCells();
+        self.updateStats();
     };
 
     J7App.prototype.checkPass = function() {
@@ -123,13 +124,11 @@ define(
 
         // count filled rows
         for (i = 0 ; i < 3 ; i++) {
-            console.log("checking filled row: " + i)
             var count = 0;
             for (var j = i * 7 ; j < (i + 1) * 7 ; j++) {
                 if (cellPlayed(j))
                     count++;
             }
-            console.log("filled count: " + count);
             if (count == 7)
                 result.bonusesEarned++;
         }
@@ -178,6 +177,10 @@ define(
                 self.onGameOver();
             } else if (wheelsUsed == self.numWheels) {
                 self.onSpin();
+            } else {
+                var bonusStats = self.countBonuses();
+                if (bonusStats.bonusesEarned == bonusStats.bonusesUsed)
+                    self.onGameOver();
             }
         } else {
             $validCells.click(function(e) { self.onCellClick(e); });

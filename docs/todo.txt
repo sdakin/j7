@@ -1,5 +1,6 @@
 change color of bonus cells
 disable respin button if any wheels have been used
+figure out scoring system
 stacked bonuses for columns/rows
 ?? add a "cash out" button to end the game if you can't finish but have unused bonuses
 

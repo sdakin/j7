@@ -35,6 +35,10 @@
 	background-color: blue;
 }
 
+.bonuscell {
+	background-color: goldenrod;
+}
+
 .roll {
 	display: table;
 	margin: auto;

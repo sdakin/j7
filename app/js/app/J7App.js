@@ -46,8 +46,14 @@ define(
 
     J7App.prototype.onNewGame = function(e) {
         var self = this;
-        self.stats = { spins:0, triples:[] };
-        $(".boardCell").removeClass("playedcell");
+        self.stats = { 
+            spins:0,
+            plays:[],
+            triples:[]
+        };
+        var $cells = $(".boardCell");
+        $cells.removeClass("playedcell");
+        $cells.removeClass("bonuscell");
         var $gameControls = $("#controlArea").children();
         $gameControls.last().hide();
         $gameControls.first().show();
@@ -64,10 +70,10 @@ define(
 
     J7App.prototype.onCellClick = function(e) {
         var self = this;
-        var cellVal = parseInt($(e.target).text());
+        var cellVal = parseInt($(e.target).text()), checkVal = cellVal;
 
-        $(e.target).addClass("playedcell");
         $(e.target).removeClass("validcell");
+        $(e.target).addClass("playedcell");
 
         function checkCells(indices) {
             var sum = 0, valid = true, checkSum = 0;
@@ -75,8 +81,8 @@ define(
                 valid &= !self.wheels[index].used;
                 checkSum += self.wheels[index].val;
             });
-            if (valid && cellVal == checkSum) {
-                cellVal -= checkSum;
+            if (valid && checkVal == checkSum) {
+                checkVal -= checkSum;
                 indices.forEach(function(index) {
                     self.useWheel(index);
                 });
@@ -89,6 +95,7 @@ define(
             checkCells([0,1,2]);
         }
 
+        self.curPlay.push(cellVal);
         self.setValidCells();
         self.updateStats();
     };
@@ -113,6 +120,9 @@ define(
             triples = (v1 == v2 && v2 == v3);
         if (triples) {
             var self = this;
+            self.curPlay.forEach(function(cellVal) {
+                self.getCell(cellVal).addClass("bonuscell");
+            });
             self.stats.triples.push(v1 * 3);
             self.updateStats();
         }
@@ -139,6 +149,9 @@ define(
         for (i = 0 ; i < 7 ; i++) {
             if (cellPlayed(i) && cellPlayed(i + 7) && cellPlayed(i + 14)) {
                 result.bonusesEarned.upAndDown++;
+                self.getCell(i + 1).addClass("bonuscell");
+                self.getCell(i + 8).addClass("bonuscell");
+                self.getCell(i + 15).addClass("bonuscell");
             }
         }
 
@@ -150,6 +163,8 @@ define(
                     count++;
             }
             if (count == 7) {
+                for (var j = i * 7 ; j < (i + 1) * 7 ; j++)
+                    self.getCell(j + 1).addClass("bonuscell");
                 result.bonusesEarned.across++;
             }
         }
@@ -270,6 +285,10 @@ define(
 
     J7App.prototype.onSpin = function() {
         var self = this;
+        
+        if (self.curPlay) self.stats.plays.push(self.curPlay);
+        self.curPlay = [];
+
         // TODO: move this to the server so the user can't modify it
         $(".wheel").each(function(index, wheel) {
             var spin = Math.ceil(Math.random() * 7);

@@ -249,6 +249,7 @@ define(
     // ---------- Game Controls ----------
 
     J7App.prototype.enableGameControls = function(flag) {
+        var self = this;
         var $controls = $("#controlArea .inGameControls .adjustments button");
         $controls.each(function(index, button) {
             if (flag)
@@ -256,6 +257,18 @@ define(
             else
                 $(button).attr("disabled", "disabled");
         });
+
+        if (flag) {
+            var $spin = $("#btnSpin");
+            var used = false;
+            self.wheels.forEach(function(wheel) {
+                used |= wheel.used;
+            });
+            if (used)
+                $spin.attr("disabled", "disabled");
+            else
+                $spin.removeAttr("disabled");
+        }
     };
 
     J7App.prototype.onGameControlClick = function(e) {

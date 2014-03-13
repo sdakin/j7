@@ -46,7 +46,7 @@ define(
 
     J7App.prototype.onNewGame = function(e) {
         var self = this;
-        self.stats = { spins:0 };
+        self.stats = { spins:0, triples:[] };
         $(".boardCell").removeClass("playedcell");
         var $gameControls = $("#controlArea").children();
         $gameControls.last().hide();
@@ -95,7 +95,6 @@ define(
 
     J7App.prototype.checkPass = function() {
         var $wheels = $(".wheel");
-
         var v1 = parseInt($($wheels[0]).text()),
             v2 = parseInt($($wheels[1]).text()),
             v3 = parseInt($($wheels[2]).text()),
@@ -106,10 +105,30 @@ define(
             $("#btnPass").attr("disabled", "disabled");
     };
 
+    J7App.prototype.checkTriplePlay = function() {
+        var $wheels = $(".wheel");
+        var v1 = parseInt($($wheels[0]).text()),
+            v2 = parseInt($($wheels[1]).text()),
+            v3 = parseInt($($wheels[2]).text()),
+            triples = (v1 == v2 && v2 == v3);
+        if (triples) {
+            var self = this;
+            self.stats.triples.push(v1 * 3);
+            self.updateStats();
+        }
+    };
+
     J7App.prototype.countBonuses = function() {
         var self = this;
         var $cells = $(".boardCell");
-        var i, result = { bonusesEarned: 0, bonusesUsed: 0 };
+        var i, result = {
+            bonusesEarned: {
+                triples: self.stats.triples.length,
+                upAndDown: 0,
+                across: 0
+            },
+            bonusesUsed: 0
+        };
 
         function cellPlayed(index) {
             var $cell = $(".boardcell[data-val='" + (index + 1) + "']");
@@ -118,8 +137,9 @@ define(
 
         // count filled columns
         for (i = 0 ; i < 7 ; i++) {
-            if (cellPlayed(i) && cellPlayed(i + 7) && cellPlayed(i + 14))
-                result.bonusesEarned++;
+            if (cellPlayed(i) && cellPlayed(i + 7) && cellPlayed(i + 14)) {
+                result.bonusesEarned.upAndDown++;
+            }
         }
 
         // count filled rows
@@ -129,8 +149,9 @@ define(
                 if (cellPlayed(j))
                     count++;
             }
-            if (count == 7)
-                result.bonusesEarned++;
+            if (count == 7) {
+                result.bonusesEarned.across++;
+            }
         }
 
         var bonusNames = ["respins", "doubles", "increments", "decrements", "busts"];
@@ -138,6 +159,8 @@ define(
             result.bonusesUsed += (self.stats[name] || 0);
         });
 
+        result.bonusesEarned.total = result.bonusesEarned.triples +
+            result.bonusesEarned.upAndDown + result.bonusesEarned.across;
         return result;
     };
 
@@ -176,10 +199,11 @@ define(
             if (playedCells == $(".boardCell").length) {
                 self.onGameOver();
             } else if (wheelsUsed == self.numWheels) {
+                self.checkTriplePlay();
                 self.onSpin();
             } else {
                 var bonusStats = self.countBonuses();
-                if (bonusStats.bonusesEarned == bonusStats.bonusesUsed)
+                if (bonusStats.bonusesEarned.total == bonusStats.bonusesUsed)
                     self.onGameOver();
             }
         } else {
@@ -259,21 +283,49 @@ define(
 
     J7App.prototype.updateStats = function() {
         var self = this;
-        var $statsUI = $("#gameStats"); $statsUI.empty();
-        var statNames = ["spins", "passes", "respins", "doubles", "increments", "decrements", "busts"];
-        var $statLine;
+        var statNames = ["spins", "passes"];
+        var earnedNames = ["triples", "upAndDown", "across"],
+            usedNames = ["respins", "doubles", "increments", "decrements", "busts"];
+        var $statLine = $('<div class="statLine"><div class="statName"></div><div class="statVal"></div></div>');
+        var $newStatLine;
 
+        var $statsUI = $("#gameStats");
+        $statsUI.empty();
         statNames.forEach(function(name) {
-            var $statLine = $('<div class="statLine"></div>');
-            $statLine.append($('<div class="statName">' + name + '</div><div class="statVal">' +
-                (self.stats[name] || 0) + '</div>'));
-            $statsUI.append($statLine);
+            $newStatLine = $statLine.clone();
+            $newStatLine.find(".statName").text(name);
+            $newStatLine.find(".statVal").text((self.stats[name] || 0));
+            $statsUI.append($newStatLine);
         });
 
         var bonusStats = self.countBonuses();
-        $("#bonusesEarned").text(bonusStats.bonusesEarned);
-        $("#bonusesUsed").text(bonusStats.bonusesUsed);
-        self.enableGameControls(bonusStats.bonusesEarned > bonusStats.bonusesUsed);
+        self.enableGameControls(bonusStats.bonusesEarned.total > bonusStats.bonusesUsed);
+
+        $statsUI = $(".earnedBonusDetails");
+        $statsUI.empty();
+        earnedNames.forEach(function(name) {
+            $newStatLine = $statLine.clone();
+            $newStatLine.find(".statName").text(name);
+            $newStatLine.find(".statVal").text((bonusStats.bonusesEarned[name] || 0));
+            $statsUI.append($newStatLine);
+        });
+        $newStatLine = $statLine.clone();
+        $newStatLine.find(".statName").text("Total");
+        $newStatLine.find(".statVal").text((bonusStats.bonusesEarned.total || 0));
+        $statsUI.append($newStatLine);
+
+        $statsUI = $(".usedBonusDetails");
+        $statsUI.empty();
+        usedNames.forEach(function(name) {
+            $newStatLine = $statLine.clone();
+            $newStatLine.find(".statName").text(name);
+            $newStatLine.find(".statVal").text((self.stats[name] || 0));
+            $statsUI.append($newStatLine);
+        });
+        $newStatLine = $statLine.clone();
+        $newStatLine.find(".statName").text("Total");
+        $newStatLine.find(".statVal").text(bonusStats.bonusesUsed);
+        $statsUI.append($newStatLine);
     };
 
     J7App.prototype.useAdjustment = function(type) {

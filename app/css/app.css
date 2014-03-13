@@ -80,12 +80,13 @@
 	text-align: right;
 }
 
-.bonusRow {
+#bonusStats {
 	display: table-row;
 }
 
-.bonusRow>div {
+.bonusGroup {
 	display: table-cell;
+	padding: 10px;
 }
 
 #bonusesEarned {

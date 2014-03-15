@@ -1,7 +1,24 @@
-figure out scoring system
-stacked bonuses for columns/rows
+implement scoring system
+	covering a cell: lower row:  15
+					 middle row: 10
+					 upper row:  25
+	opening 7's: an opening 7, 14 or 21 results in a bonus earned and a doubling value
+				 that starts at 100 (100, 200, 400, ...). Opening triples are doubled and
+				 keep the opening bonus in effect. For 21's both bonuses are applied.
+	triples: 3, 6: 3x25=75
+			 9, 12: 3x50=150
+			 15, 18, 21: 3x100=300
+	up&down: 25 per column, left to right (25, 50, 75, 100, 125, 150, 175), 
+			 each column goes down 25 when one is played
+	across:	 100 per row, bottom to top (100, 200, 300),
+			 each row goes down 100 when one is played
+	13's: rolling a 13 at any time results in the loss of a bonus and a doubling penalty
+		  that starts at 100. Opening 13 penalties are doubled (loss of two bonuses and
+		  skip 1 in the doubling penalty sequence).
+opening bonus indicator
 ?? add a "cash out" button to end the game if you can't finish but have unused bonuses
 save stats at the end of the game
+levels: beginner, intermediate, advanced, expert
 
 X triples bonus
 X change color of bonus cells

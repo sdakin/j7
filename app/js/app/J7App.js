@@ -6,8 +6,8 @@ The main application module for the Jester's Sevens app.
 @extends EventTarget
 **/
 define(
-    ["xlib/EventTarget", "jqueryUI"],
-    function(EventTarget)
+    ["xlib/EventTarget", "app/ScoreCounter", "jqueryUI"],
+    function(EventTarget, ScoreCounter)
 {
     "use strict";
 
@@ -20,6 +20,7 @@ define(
 
         this.numWheels = 3;
         this.wheels = [];
+        this.scoreCounter = new ScoreCounter();
         for (var i = 0 ; i < this.numWheels ; i++)
             this.wheels.push({val:0, used:false});
     }
@@ -51,6 +52,7 @@ define(
             plays:[],
             triples:[]
         };
+        self.scoreCounter.startGame();
         var $cells = $(".boardCell");
         $cells.removeClass("playedcell");
         $cells.removeClass("bonuscell");
@@ -58,6 +60,11 @@ define(
         $gameControls.last().hide();
         $gameControls.first().show();
         self.onSpin();
+    };
+
+    J7App.prototype.onEndSpin = function() {
+        var self = this;
+        self.checkTriplePlay();
     };
 
     J7App.prototype.onGameOver = function() {
@@ -74,6 +81,7 @@ define(
 
         $(e.target).removeClass("validcell");
         $(e.target).addClass("playedcell");
+        self.scoreCounter.scoreCell(cellVal);
 
         function checkCells(indices) {
             var sum = 0, valid = true, checkSum = 0;
@@ -124,6 +132,7 @@ define(
                 self.getCell(cellVal).addClass("bonuscell");
             });
             self.stats.triples.push(v1 * 3);
+            self.scoreCounter.scoreTriple(v1 * 3);
             self.updateStats();
         }
     };
@@ -214,7 +223,7 @@ define(
             if (playedCells == $(".boardCell").length) {
                 self.onGameOver();
             } else if (wheelsUsed == self.numWheels) {
-                self.checkTriplePlay();
+                self.onEndSpin();
                 self.onSpin();
             } else {
                 var bonusStats = self.countBonuses();

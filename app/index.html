@@ -4,7 +4,6 @@
 <link rel="stylesheet" type="text/css" href="css/app.css">
 </head>
 <body>
-	<p>Welcome to Jester's Sevens!</p>
 	<div id="modalOverlay">
 		<div id="selectWheel">
 			<button id="btnWheel1" type="button" class="btn btn-default">1</button>
@@ -15,6 +14,12 @@
 		<button id="btnCancel" type="button" class="btn btn-default">Cancel</button>
 	</div>
 	<div class="gametable">
+		<div class="boardHeader">
+			<div class="gameTitle">Welcome to Jester's Sevens!</div>
+			<div class="scoreArea">
+				<div>Score:</div><div id="scoreVal"></div>
+			</div>
+		</div>
 		<div class="board">
 			<div class="boardRow">
 				<div class="boardCell" data-val="15">15</div>

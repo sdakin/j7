@@ -16,7 +16,9 @@ define([], function()
     		},
     		opening7s: 0,
     		openingTriples: 0,
-    		triples: 0
+    		triples: 0,
+    		upAndDowns: 0,
+    		acrosses: 0
     	};
     }
 
@@ -55,6 +57,8 @@ define([], function()
     ScoreCounter.prototype.startGame = function() {
     	this.setScore(0);
     	this.openingBonus = true;
+    	this.rowsPlayed = [];
+    	this.colsPlayed = [];
 	};
 
 	ScoreCounter.prototype.addToScore = function(amount) {
@@ -66,9 +70,26 @@ define([], function()
 		this.$scoreUI.text(val);
 	};
 
+	// returns the ordinal column index (0..6) of the specified value
+	ScoreCounter.prototype.valCol = function(val) {
+		return ((val - 1) % 7);
+	};
+
 	// returns the ordinal row index (0, 1, 2) of the specified value
 	ScoreCounter.prototype.valRow = function(val) {
 		return Math.floor((val - 1) / 7);
+	};
+
+	ScoreCounter.prototype.scoreAcross = function(rowIndex) {
+		var lowerPlayed = 0;
+		for (var i = 0 ; i < rowIndex ; i++) {
+			if (this.rowsPlayed.indexOf(i) >= 0)
+				lowerPlayed++;
+		}
+		this.rowsPlayed.push(rowIndex);
+		var bonus = 100, bonusPts = (rowIndex + 1) * bonus - (lowerPlayed * bonus);
+		this.scores.acrosses += bonusPts;
+		this.addToScore(bonusPts);
 	};
 
 	ScoreCounter.prototype.scoreCell = function(val) {
@@ -94,6 +115,18 @@ define([], function()
 			this.scores.openingTriples += bonusPts;
 		} else
 			this.scores.triples += bonusPts;
+		this.addToScore(bonusPts);
+	};
+
+	ScoreCounter.prototype.scoreUpAndDown = function(colIndex) {
+		var lowerPlayed = 0;
+		for (var i = 0 ; i < colIndex ; i++) {
+			if (this.colsPlayed.indexOf(i) >= 0)
+				lowerPlayed++;
+		}
+		this.colsPlayed.push(colIndex);
+		var bonus = 25, bonusPts = (colIndex + 1) * bonus - (lowerPlayed * bonus);
+		this.scores.upAndDowns += bonusPts;
 		this.addToScore(bonusPts);
 	};
 

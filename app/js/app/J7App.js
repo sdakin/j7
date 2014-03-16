@@ -18,6 +18,8 @@ define(
     function J7App() {
         EventTarget.call(this);
 
+        this.debugSpins = [ [6,6,2], [3,2,1], [7,7,7], [5,2,1], [3,7,4] ];
+
         this.numWheels = 3;
         this.wheels = [];
         this.scoreCounter = new ScoreCounter();
@@ -50,7 +52,9 @@ define(
         self.stats = { 
             spins:0,
             plays:[],
-            triples:[]
+            triples:[],
+            opening7s: 0,
+            openingTriples: 0
         };
         self.scoreCounter.startGame();
         var $cells = $(".boardCell");
@@ -64,7 +68,17 @@ define(
 
     J7App.prototype.onEndSpin = function() {
         var self = this;
-        self.checkTriplePlay();
+        var v1 = this.wheels[0].val, v2 = this.wheels[1].val, v3 = this.wheels[2].val;
+        var inOpeningBonus = self.checkOpeningBonus();
+        if (inOpeningBonus) {
+            var sum = v1 + v2 + v3;
+            if (sum % 7 == 0) {
+                self.scoreCounter.scoreOpeningSevens();
+                self.markPlayedCellsAsBonus();
+                self.stats.opening7s++;
+            }
+        }
+        self.checkTriplePlay(inOpeningBonus);
     };
 
     J7App.prototype.onGameOver = function() {
@@ -103,9 +117,14 @@ define(
             checkCells([0,1,2]);
         }
 
-        self.curPlay.push(cellVal);
+        self.curPlay.cellsPlayed.push(cellVal);
         self.setValidCells();
         self.updateStats();
+    };
+
+    J7App.prototype.checkOpeningBonus = function() {
+        var self = this;
+        return self.scoreCounter.checkOpeningBonus(self.wheels, self.stats.plays);
     };
 
     J7App.prototype.checkPass = function() {
@@ -120,19 +139,14 @@ define(
             $("#btnPass").attr("disabled", "disabled");
     };
 
-    J7App.prototype.checkTriplePlay = function() {
-        var $wheels = $(".wheel");
-        var v1 = parseInt($($wheels[0]).text()),
-            v2 = parseInt($($wheels[1]).text()),
-            v3 = parseInt($($wheels[2]).text()),
+    J7App.prototype.checkTriplePlay = function(inOpeningBonus) {
+        var v1 = this.wheels[0].val, v2 = this.wheels[1].val, v3 = this.wheels[2].val,
             triples = (v1 == v2 && v2 == v3);
         if (triples) {
             var self = this;
-            self.curPlay.forEach(function(cellVal) {
-                self.getCell(cellVal).addClass("bonuscell");
-            });
+            self.markPlayedCellsAsBonus();
             self.stats.triples.push(v1 * 3);
-            self.scoreCounter.scoreTriple(v1 * 3);
+            self.scoreCounter.scoreTriple(v1 * 3, inOpeningBonus);
             self.updateStats();
         }
     };
@@ -142,6 +156,8 @@ define(
         var $cells = $(".boardCell");
         var i, result = {
             bonusesEarned: {
+                opening7s: self.stats.opening7s,
+                openingTriples: self.stats.openingTriples,
                 triples: self.stats.triples.length,
                 upAndDown: 0,
                 across: 0
@@ -183,9 +199,20 @@ define(
             result.bonusesUsed += (self.stats[name] || 0);
         });
 
-        result.bonusesEarned.total = result.bonusesEarned.triples +
-            result.bonusesEarned.upAndDown + result.bonusesEarned.across;
+        var totalBonuses = 0;
+        for (var prop in result.bonusesEarned) {
+            totalBonuses += result.bonusesEarned[prop];
+        }
+        result.bonusesEarned.total = totalBonuses;
+
         return result;
+    };
+
+    J7App.prototype.markPlayedCellsAsBonus = function() {
+        var self = this;
+        self.curPlay.cellsPlayed.forEach(function(cellVal) {
+            self.getCell(cellVal).addClass("bonuscell");
+        });
     };
 
     J7App.prototype.setValidCells = function() {
@@ -301,6 +328,7 @@ define(
         if (self.stats.passes === undefined)
             self.stats.passes = 0;
         self.stats.passes += 1;
+        self.curPlay.pass = true;
         self.updateStats();
         self.onSpin();
     };
@@ -308,14 +336,28 @@ define(
     J7App.prototype.onSpin = function() {
         var self = this;
         
-        if (self.curPlay) self.stats.plays.push(self.curPlay);
-        self.curPlay = [];
+        if (self.curPlay) {
+            self.curPlay.endSpin = [self.wheels[0].val, self.wheels[1].val, self.wheels[2].val];
+            self.stats.plays.push(self.curPlay);
+        }
+        self.curPlay = {};
+        self.curPlay.startSpin = [];
+        self.curPlay.cellsPlayed = [];
 
         // TODO: move this to the server so the user can't modify it
-        $(".wheel").each(function(index, wheel) {
-            var spin = Math.ceil(Math.random() * 7);
-            self.setWheel(index, spin);
-        });
+        if (self.debugSpins && self.debugSpins.length > 0) {
+            var debugSpin = self.debugSpins.shift();
+            for (var i = 0 ; i < debugSpin.length ; i++)
+                self.setWheel(i, debugSpin[i]);
+            self.curPlay.startSpin = debugSpin[i];
+        } else {
+            $(".wheel").each(function(index, wheel) {
+                var spin = Math.ceil(Math.random() * 7);
+                self.setWheel(index, spin);
+                self.curPlay.startSpin.push(spin);
+            });
+        }
+        self.checkOpeningBonus();
         self.checkPass();
         self.setValidCells();
         self.stats.spins++;
@@ -325,7 +367,7 @@ define(
     J7App.prototype.updateStats = function() {
         var self = this;
         var statNames = ["spins", "passes"];
-        var earnedNames = ["triples", "upAndDown", "across"],
+        var earnedNames = ["opening7s", "openingTriples", "triples", "upAndDown", "across"],
             usedNames = ["respins", "doubles", "increments", "decrements", "busts"];
         var $statLine = $('<div class="statLine"><div class="statName"></div><div class="statVal"></div></div>');
         var $newStatLine;
@@ -415,8 +457,10 @@ define(
                 self.app.useAdjustment("busts");
                 break;
         }
-        if (origVal != curVal)
+        if (origVal != curVal) {
             self.app.setWheel(index, curVal);
+            self.app.checkOpeningBonus();
+        }
         self.hide();
         self.app.setValidCells();
     };

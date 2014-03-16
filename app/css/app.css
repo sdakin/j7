@@ -54,6 +54,16 @@
 	background-color: goldenrod;
 }
 
+.rollarea {
+	position: relative;
+}
+
+#openingBonus {
+	position: absolute;
+	top: 19;
+	left: 20;
+}
+
 .roll {
 	display: table;
 	margin: auto;

@@ -18,7 +18,7 @@ implement scoring system
   x across:	 covering all 7 cells in a row earns a trick and 100 points per row, bottom to top
 			 (100, 200, 300). The bonus points for a row are reduced by 100 points for each
 			 row below that has already scored an across bonus.
-	unused bonuses: at the end of the game each unused bonus will be awarded a doubling value
+  x unused bonuses: at the end of the game each unused bonus will be awarded a doubling value
 					starting at 50 (50, 100, 200, ...).
 	13's: rolling a 13 at any time results in the loss of a bonus and a doubling penalty
 		  that starts at 100. Opening 13 penalties are doubled (loss of two bonuses and

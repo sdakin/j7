@@ -80,9 +80,17 @@ define(
     };
 
     J7App.prototype.onGameOver = function() {
+        var self = this;
         var $gameControls = $("#controlArea").children();
         $gameControls.first().hide();
         $gameControls.last().show();
+
+        // score unused bonuses
+        var bonusStats = self.countBonuses();
+        var count = bonusStats.bonusesEarned.total - bonusStats.bonusesUsed;
+        if (count > 0)
+            self.scoreCounter.scoreUnusedBonuses(count);
+        self.updateStats();
 
         // TODO: save the stats
     };
@@ -238,7 +246,7 @@ define(
                 valid &= !self.wheels[index].used;
                 sum += self.wheels[index].val;
             });
-            if (valid && sum >= 0 && sum < 21) {
+            if (valid && sum > 0 && sum <= 21) {
                 var cell = self.cells[sum - 1];
                 if (!cell.isPlayed())
                     cell.setValid();

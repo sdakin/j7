@@ -62,6 +62,7 @@
 	position: absolute;
 	top: 19;
 	left: 20;
+	display: none;
 }
 
 .roll {

@@ -5,21 +5,6 @@ define([], function()
     function ScoreCounter() {
     	this.$scoreUI = $("#scoreVal");
     	this.startGame();
-    	this.opening7sBonus = 100;
-    	this.openingTriplesBonus = 100;
-    	this.thirteenPenalty = -100;
-    	this.scores = {
-    		cells: {
-    			"lower row": 0,
-    			"middle row": 0,
-    			"upper row": 0
-    		},
-    		opening7s: 0,
-    		openingTriples: 0,
-    		triples: 0,
-    		upAndDowns: 0,
-    		acrosses: 0
-    	};
     }
 
     ScoreCounter.prototype.checkOpeningBonus = function(wheels, plays) {
@@ -59,6 +44,22 @@ define([], function()
     	this.openingBonus = true;
     	this.rowsPlayed = [];
     	this.colsPlayed = [];
+    	this.opening7sBonus = 100;
+    	this.openingTriplesBonus = 100;
+    	this.thirteenPenalty = -100;
+    	this.scores = {
+    		cells: {
+    			"lower row": 0,
+    			"middle row": 0,
+    			"upper row": 0
+    		},
+    		opening7s: 0,
+    		openingTriples: 0,
+    		triples: 0,
+    		upAndDowns: 0,
+    		acrosses: 0,
+    		unusedBonuses: 0
+    	};
 	};
 
 	ScoreCounter.prototype.addToScore = function(amount) {
@@ -117,6 +118,16 @@ define([], function()
 			this.scores.triples += bonusPts;
 		this.addToScore(bonusPts);
 	};
+
+	ScoreCounter.prototype.scoreUnusedBonuses = function(count) {
+		var bonus = 50, bonusPts = 0;
+		for (var i = 0 ; i < count ; i++) {
+			bonusPts += bonus;
+			bonus *= 2;
+		}
+		this.scores.unusedBonuses = bonusPts;
+		this.addToScore(bonusPts);
+	}
 
 	ScoreCounter.prototype.scoreUpAndDown = function(colIndex) {
 		var lowerPlayed = 0;

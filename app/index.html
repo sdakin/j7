@@ -4,20 +4,13 @@
 <link rel="stylesheet" type="text/css" href="css/app.css">
 </head>
 <body>
-	<div id="modalOverlay">
-		<div id="selectWheel">
-			<button id="btnWheel1" type="button" class="btn btn-default">1</button>
-			<button id="btnWheel2" type="button" class="btn btn-default">2</button>
-			<button id="btnWheel3" type="button" class="btn btn-default">3</button>
-		</div>
-		<div id="selectPrompt"></div>
-		<button id="btnCancel" type="button" class="btn btn-default">Cancel</button>
-	</div>
 	<div class="gametable">
 		<div class="boardHeader">
 			<div class="gameTitle">Welcome to Jester's Sevens!</div>
 			<div class="scoreArea">
-				<div>Score:</div><div id="scoreVal"></div>
+				<div>Score<span id="scoreVal"></span></div>
+				<div><a class="btnScoreInfo" href="#"><img src="img/info.png"/></a></div>
+				<div class="scoreSpins">Spins<span id="spinsVal">0</span></div>
 			</div>
 		</div>
 		<div class="board">
@@ -67,7 +60,9 @@
 					<button id="btnBust" type="button" class="btn btn-primary btn-sm">Bust</button>
 				</div>
 				<div style="padding-top:10px">
-					<button id="btnPass" type="button" class="btn btn-success btn-sm">Pass</button>
+					<button id="btnPass" type="button" class="btn btn-success btn-sm">
+						Pass<span id="bdgPass" class="badge">0</span>
+					</button>
 				</div>
 			</div>
 			<div class="gameOverControls" style="display:none">
@@ -88,6 +83,18 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<div id="scoreDetailsDlg" class="modalOverlay">
+		<div id="scoreDetails"></div>
+	</div>
+	<div id="selectWheelDlg" class="modalOverlay">
+		<div id="selectWheel">
+			<div id="selectPrompt"></div>
+			<button id="btnWheel1" type="button" class="btn btn-default">1</button>
+			<button id="btnWheel2" type="button" class="btn btn-default">2</button>
+			<button id="btnWheel3" type="button" class="btn btn-default">3</button>
+			<button id="btnCancel" type="button" class="btn btn-default">Cancel</button>
 		</div>
 	</div>
 <script data-main="js/app/appMain" src="js/xlib/require.js"></script>

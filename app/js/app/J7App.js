@@ -6,8 +6,11 @@ The main application module for the Jester's Sevens app.
 @extends EventTarget
 **/
 define(
-    ["xlib/EventTarget", "app/ScoreCounter", "ui/Cell", "jqueryUI"],
-    function(EventTarget, ScoreCounter, Cell)
+    ["xlib/EventTarget", 
+     "app/ScoreCounter", "app/SelectWheelDlg", "app/ScoreDetailsDlg",
+     "ui/Cell",
+     "jquery"],
+    function(EventTarget, ScoreCounter, SelectWheelDlg, ScoreDetailsDlg, Cell)
 {
     "use strict";
 
@@ -18,7 +21,7 @@ define(
     function J7App() {
         EventTarget.call(this);
 
-//        this.debugSpins = [ [6,6,2], [4,4,4], [7,7,7], [5,2,1], [3,7,4] ];
+        // this.debugSpins = [ [3,2,2], [4,4,4], [7,7,7], [5,2,1], [3,7,4] ];
 
         this.numWheels = 3;
         this.wheels = [];
@@ -33,10 +36,12 @@ define(
     J7App.prototype.init = function() {
         var self = this;
 
-        self.selectWheelOverlay = new SelectWheelOverlay(self);
+        self.selectWheelDlg = new SelectWheelDlg(self);
+        self.scoreDetailsDlg = new ScoreDetailsDlg(self);
         $(".inGameControls button").click(function(e) { self.onGameControlClick(e); });
         $("#btnPass").click(function() { self.onPass(); });
         $("#btnNewGame").click(function(e) { self.onNewGame(); });
+        $(".btnScoreInfo").click(function() { self.showScoreDetails(); });
 
         self.cells = [];
         for (var i = 1 ; i <= 21 ; i++)
@@ -235,6 +240,10 @@ define(
         });
     };
 
+    J7App.prototype.showScoreDetails = function() {
+        this.scoreDetailsDlg.show(this.scoreCounter.scores);
+    };
+
     J7App.prototype.setValidCells = function() {
         var self = this;
         $(".boardCell").unbind("click");
@@ -338,7 +347,7 @@ define(
             case "+1":
             case "-1":
             case "bust":
-                self.selectWheelOverlay.show(buttonTitle);
+                self.selectWheelDlg.show(buttonTitle);
                 break;
         }
     };
@@ -386,20 +395,13 @@ define(
 
     J7App.prototype.updateStats = function() {
         var self = this;
-        var statNames = ["spins", "passes"];
         var earnedNames = ["opening7s", "openingTriples", "triples", "upAndDown", "across"],
             usedNames = ["respins", "doubles", "increments", "decrements", "busts"];
         var $statLine = $('<div class="statLine"><div class="statName"></div><div class="statVal"></div></div>');
-        var $newStatLine;
+        var $statsUI, $newStatLine;
 
-        var $statsUI = $("#gameStats");
-        $statsUI.empty();
-        statNames.forEach(function(name) {
-            $newStatLine = $statLine.clone();
-            $newStatLine.find(".statName").text(name);
-            $newStatLine.find(".statVal").text((self.stats[name] || 0));
-            $statsUI.append($newStatLine);
-        });
+        $("#spinsVal").text(self.stats.spins);
+        $("#bdgPass").text(self.stats.passes);
 
         var bonusStats = self.countBonuses();
         self.enableGameControls(bonusStats.bonusesEarned.total > bonusStats.bonusesUsed);
@@ -437,78 +439,6 @@ define(
             self.stats[type] = 0;
         self.stats[type] += 1;
         self.updateStats();
-    };
-
-
-    // ---------- Select Wheel Overlay ----------
-
-    function SelectWheelOverlay(initApp) {
-        var self = this;
-
-        self.app = initApp;
-        self.$overlay = $("#modalOverlay");
-        $("#btnCancel").click(function(e) { self.hide(); });
-        var $buttons = $("#selectWheel button");
-        $buttons.click(function(e) { self.onSelectWheel(e); });
-        var index = 0;
-        self.app.wheels.forEach(function(wheel) {
-            if (self.app.wheels[index].used)
-                $($buttons[index]).attr("disabled", "disabled");
-            else
-                $($buttons[index]).removeAttr("disabled");
-        });
-    }
-
-    SelectWheelOverlay.prototype.onSelectWheel = function(e) {
-        var self = this;
-        var index = parseInt($(e.target).attr("id").substr(8)) - 1;
-        var $wheels = $(".wheel");
-        var origVal = parseInt($($wheels[index]).text()), curVal = origVal;
-
-        switch (self.mode) {
-            case "double":
-                curVal *= 2; self.app.useAdjustment("doubles"); break;
-            case "+1":
-                curVal++; self.app.useAdjustment("increments"); break;
-            case "-1":
-                curVal--; self.app.useAdjustment("decrements"); break;
-            case "bust":
-                self.app.useWheel(index);
-                self.app.useAdjustment("busts");
-                break;
-        }
-        if (origVal != curVal) {
-            self.app.setWheel(index, curVal);
-            self.app.checkOpeningBonus();
-        }
-        self.hide();
-        self.app.setValidCells();
-    };
-
-    SelectWheelOverlay.prototype.hide = function() {
-        this.$overlay.hide();
-    };
-
-    SelectWheelOverlay.prototype.show = function (type) {
-        var self = this;
-        self.mode = type;
-        var $board = $(".board"), boardPos = $board.offset(),
-            boardWidth = $board.outerWidth(), boardHeight = $board.outerHeight();
-        var $selector = $("#selectWheel");
-        var $wheelSelectors = $selector.children(), $wheels = $(".wheel");
-
-        $("#selectPrompt").text("Select wheel to " + type);
-        $selector.width(boardWidth);
-        for (var i = 0 ; i < self.app.numWheels ; i++) {
-            $($wheelSelectors[i]).text($($wheels[i]).text());
-            
-            // disable buttons for wheels that are already used
-            if (self.app.wheels[i].used)
-                $($wheelSelectors[i]).attr("disabled", "disabled");
-            else
-                $($wheelSelectors[i]).removeAttr("disabled");
-        }
-        this.$overlay.show();
     };
 
     return J7App;

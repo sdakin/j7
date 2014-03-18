@@ -10,11 +10,30 @@
 }
 
 .scoreArea {
-	display: table-row;
+	display: block;
+	position: relative;
 }
 
 .scoreArea>div {
-	display: table-cell;
+	display: inline-block;
+}
+
+.btnScoreInfo>img {
+	padding-left: 5;
+	padding-bottom: 5;
+}
+
+.scoreSpins {
+	position: absolute;
+	right: 0;
+}
+
+#scoreVal {
+	padding-left: 5;
+}
+
+#spinsVal {
+	padding-left: 5;
 }
 
 .board {
@@ -88,6 +107,10 @@
 	text-align: center;
 }
 
+.gameOverControls {
+	text-align: center;
+}
+
 .inGameControls button {
 	font-size: 12px;
 }
@@ -129,7 +152,7 @@
 	text-align: right;
 }
 
-#modalOverlay {
+.modalOverlay {
 	display:none;
 	position: absolute;
 	top: 0;
@@ -142,7 +165,7 @@
 
 #selectPrompt {
 	position: absolute;
-	top: 115;
+	top: 10;
 	width: 284;
 	font-size: 24;
 	text-align: center;
@@ -159,7 +182,7 @@
 
 #btnCancel {
 	position: relative;
-	top: 70;
+	top: 108;
 	right: -108;
 }
 
@@ -188,4 +211,30 @@
 	width: 50px;
 	height: 50px;
 	font-size: 24;
+}
+
+#bdgPass {
+	margin-left: 5;
+}
+
+#scoreDetails {
+	position: absolute;
+	top: 65;
+	padding: 10;
+	background-color: white;
+	border-radius: 6px;
+}
+
+.scoreLine {
+	display: table-row;
+}
+
+.scoreDesc {
+	display: table-cell;
+}
+
+.scoreVal {
+	display: table-cell;
+	padding-left: 5;
+	text-align: right;
 }

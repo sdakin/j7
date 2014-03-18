@@ -120,10 +120,10 @@ define([], function()
 	};
 
 	ScoreCounter.prototype.scoreUnusedBonuses = function(count) {
-		var bonus = 50, bonusPts = 0;
+		var bonus = 25, bonusPts = 0;
 		for (var i = 0 ; i < count ; i++) {
 			bonusPts += bonus;
-			bonus *= 2;
+			bonus += 25;
 		}
 		this.scores.unusedBonuses = bonusPts;
 		this.addToScore(bonusPts);

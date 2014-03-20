@@ -1,5 +1,8 @@
 .gametable {
 	display: inline-block;
+	background-image: url('/img/bg.png');
+	width: 320;
+	height: 480;
 }
 
 .gameTitle {
@@ -12,6 +15,7 @@
 .scoreArea {
 	display: block;
 	position: relative;
+	padding-left: 15px;
 }
 
 .scoreArea>div {
@@ -25,7 +29,7 @@
 
 .scoreSpins {
 	position: absolute;
-	right: 0;
+	right: 15;
 }
 
 #scoreVal {
@@ -40,6 +44,7 @@
 	display: table;
 	border: solid 1px;
 	border-spacing: 1;
+	margin: auto;
 }
 
 .boardRow {
@@ -117,6 +122,17 @@
 
 .inGameControls button {
 	font-size: 12px;
+}
+
+.adjustments {
+	position: relative;
+}
+
+.btnBonusInfo {
+	position: absolute;
+	top: -25;
+	right: 15;
+	cursor: pointer;
 }
 
 #gameStats {

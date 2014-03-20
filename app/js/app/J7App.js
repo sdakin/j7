@@ -7,10 +7,10 @@ The main application module for the Jester's Sevens app.
 **/
 define(
     ["xlib/EventTarget", 
-     "app/ScoreCounter", "app/SelectWheelDlg", "app/ScoreDetailsDlg",
+     "app/ScoreCounter", "app/SelectWheelDlg", "app/ScoreDetailsDlg", "app/BonusDetailsDlg",
      "ui/Cell",
      "jquery"],
-    function(EventTarget, ScoreCounter, SelectWheelDlg, ScoreDetailsDlg, Cell)
+    function(EventTarget, ScoreCounter, SelectWheelDlg, ScoreDetailsDlg, BonusDetailsDlg, Cell)
 {
     "use strict";
 
@@ -38,10 +38,12 @@ define(
 
         self.selectWheelDlg = new SelectWheelDlg(self);
         self.scoreDetailsDlg = new ScoreDetailsDlg(self);
+        self.bonusDetailsDlg = new BonusDetailsDlg(self);
         $(".inGameControls button").click(function(e) { self.onGameControlClick(e); });
         $("#btnPass").click(function() { self.onPass(); });
         $("#btnNewGame").click(function(e) { self.onNewGame(); });
         $(".btnScoreInfo").click(function() { self.showScoreDetails(); });
+        $(".btnBonusInfo").click(function() { self.showBonusDetails(); });
 
         self.cells = [];
         for (var i = 1 ; i <= 21 ; i++)
@@ -80,7 +82,7 @@ define(
         var inOpeningBonus = self.checkOpeningBonus();
         if (inOpeningBonus) {
             var sum = v1 + v2 + v3;
-            if (sum % 7 == 0) {
+            if (sum % 7 === 0) {
                 self.scoreCounter.scoreOpeningSevens();
                 self.markPlayedCellsAsBonus();
                 self.stats.opening7s++;
@@ -145,7 +147,7 @@ define(
         // check across bonus
         var rowIdx = self.scoreCounter.valRow(cellVal);
         var i, count = 0;
-        for (var i = rowIdx * 7 ; i < (rowIdx + 1) * 7 ; i++) {
+        for (i = rowIdx * 7 ; i < (rowIdx + 1) * 7 ; i++) {
             if (self.cells[i].isPlayed())
                 count++;
         }
@@ -266,6 +268,11 @@ define(
         });
     };
 
+    J7App.prototype.showBonusDetails = function() {
+        var bonusInfo = this.countBonuses();
+        this.bonusDetailsDlg.show(bonusInfo);
+    };
+
     J7App.prototype.showScoreDetails = function() {
         this.scoreDetailsDlg.show(this.scoreCounter.scores);
     };
@@ -293,7 +300,7 @@ define(
         checkWheels([0,1,2]);
 
         var $validCells = $(".validcell");
-        if ($validCells.length == 0) {
+        if ($validCells.length === 0) {
             var wheelsUsed = 0;
             this.wheels.forEach(function(wheel) {
                 if (wheel.used)
@@ -334,7 +341,7 @@ define(
             $wheel.addClass("usedwheel");
             this.wheels[index].used = true;
         }
-    }
+    };
 
 
     // ---------- Game Controls ----------

@@ -1,5 +1,3 @@
-"use strict";
-
 requirejs.config({
     "baseUrl": "js",
 
@@ -21,6 +19,8 @@ requirejs.config({
 var gApp;
 
 define(["app/J7App"], function(J7App) {
-	gApp = new J7App();
-	gApp.init();
+  "use strict";
+
+  gApp = new J7App();
+  gApp.init();
 });

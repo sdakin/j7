@@ -4,8 +4,8 @@ define([], function()
 
     // initVal is the actual visible value of the cell (1-based)
     function Cell(initVal) {
-    	this.$ui = $(".boardcell[data-val='" + (initVal) + "']");
-    	this.val = initVal;
+        this.$ui = $(".boardcell[data-val='" + (initVal) + "']");
+        this.val = initVal;
     }
 
     Cell.prototype.isBonus = function() {

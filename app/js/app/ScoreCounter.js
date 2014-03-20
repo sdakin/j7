@@ -58,7 +58,9 @@ define([], function()
     		triples: 0,
     		upAndDowns: 0,
     		acrosses: 0,
-    		unusedBonuses: 0
+    		unusedBonuses: 0,
+    		openingThirteens: 0,
+    		thirteens: 0
     	};
 	};
 
@@ -106,6 +108,17 @@ define([], function()
 		self.scores.opening7s += self.opening7sBonus;
 		self.addToScore(self.opening7sBonus);
 		self.opening7sBonus *= 2;
+	};
+
+	ScoreCounter.prototype.scoreThirteen = function(inOpeningBonus) {
+		if (inOpeningBonus) {
+			this.thirteenPenalty *= 2;
+			this.scores.openingThirteens += this.thirteenPenalty;
+		} else {
+			this.scores.thirteens += this.thirteenPenalty;
+		}
+		this.addToScore(this.thirteenPenalty);
+		this.thirteenPenalty *= 2;
 	};
 
 	ScoreCounter.prototype.scoreTriple = function(val, inOpeningBonus) {

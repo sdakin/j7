@@ -1,4 +1,22 @@
-implement scoring system
+clean up bonuses earned/used display (use popup like score details)
+add a "cash out" button to end the game if you can't finish but have unused bonuses
+scrolling points scoring display
+
+server:
+	save stats at the end of the game
+	use passport to support log in w/ Google and Facebook
+
+
+future:
+	levels: beginner, intermediate, advanced, expert
+
+
+done:
+x triples bonus
+x change color of bonus cells
+x disable respin button if any wheels have been used
+x opening bonus indicator
+x implement scoring system
   x covering a cell: lower row:  15
 					 middle row: 10
 					 upper row:  25
@@ -20,21 +38,7 @@ implement scoring system
 			 row below that has already scored an across bonus.
   x unused bonuses: at the end of the game each unused bonus will score bonus points that start
   					at 25 and increase by 25 for each successive one (25, 50, 75, ...).
-	13's: rolling a 13 at any time results in the loss of a bonus and a doubling penalty
+  x 13's: rolling a 13 at any time results in the loss of a bonus and a doubling penalty
 		  that starts at 100. Opening 13 penalties are doubled (loss of two bonuses and
 		  skip 1 in the doubling penalty sequence).
-score details popup (need to add 13s penalty)
-add a "cash out" button to end the game if you can't finish but have unused bonuses
-save stats at the end of the game
-scrolling points scoring display
-
-
-future:
-	levels: beginner, intermediate, advanced, expert
-
-
-done:
-x triples bonus
-x change color of bonus cells
-x disable respin button if any wheels have been used
-x opening bonus indicator
+x score details popup

@@ -21,7 +21,7 @@ define(
     function J7App() {
         EventTarget.call(this);
 
-        // this.debugSpins = [ [3,2,2], [4,4,4], [7,7,7], [5,2,1], [3,7,4] ];
+        // this.debugSpins = [ [3,5,5], [4,4,4], [7,7,7], [5,2,1], [3,7,4] ];
 
         this.numWheels = 3;
         this.wheels = [];
@@ -55,14 +55,19 @@ define(
         self.stats = { 
             spins:0,
             plays:[],
+            passes: 0,
             triples:0,
             opening7s: 0,
-            openingTriples: 0
+            openingTriples: 0,
+            thirteens: 0,
+            opening13s: 0
         };
         self.scoreCounter.startGame();
+        self.curPlay = null;
         var $cells = $(".boardCell");
         $cells.removeClass("playedcell");
         $cells.removeClass("bonuscell");
+        $cells.removeClass("penaltycell");
         var $gameControls = $("#controlArea").children();
         $gameControls.last().hide();
         $gameControls.first().show();
@@ -82,6 +87,7 @@ define(
             }
         }
         self.checkTriplePlay(inOpeningBonus);
+        self.checkThirteen(inOpeningBonus);
     };
 
     J7App.prototype.onGameOver = function() {
@@ -171,6 +177,19 @@ define(
             $("#btnPass").attr("disabled", "disabled");
     };
 
+    J7App.prototype.checkThirteen = function(inOpeningBonus) {
+        var self = this;
+        var sum = self.wheels[0].val + self.wheels[1].val + self.wheels[2].val;
+        if (sum == 13) {
+            self.markPlayedCellsAsPenalty();
+            if (inOpeningBonus)
+                self.stats.opening13s++;
+            else
+                self.stats.thirteens++;
+            self.scoreCounter.scoreThirteen(inOpeningBonus);
+        }
+    };
+
     J7App.prototype.checkTriplePlay = function(inOpeningBonus) {
         var v1 = this.wheels[0].val, v2 = this.wheels[1].val, v3 = this.wheels[2].val,
             triples = (v1 == v2 && v2 == v3);
@@ -237,6 +256,13 @@ define(
         var self = this;
         self.curPlay.cellsPlayed.forEach(function(cellVal) {
             self.cells[cellVal - 1].setBonus();
+        });
+    };
+
+    J7App.prototype.markPlayedCellsAsPenalty = function() {
+        var self = this;
+        self.curPlay.cellsPlayed.forEach(function(cellVal) {
+            self.cells[cellVal - 1].setPenalty();
         });
     };
 
@@ -354,8 +380,6 @@ define(
 
     J7App.prototype.onPass = function() {
         var self = this;
-        if (self.stats.passes === undefined)
-            self.stats.passes = 0;
         self.stats.passes += 1;
         self.curPlay.pass = true;
         self.updateStats();

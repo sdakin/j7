@@ -17,7 +17,7 @@ define([], function()
     	$details.empty();
 
     	function addScore(scoreDescription, scoreVal, always) {
-    		if (scoreVal > 0 || always) {
+    		if (scoreVal != 0 || always) {
     			var $line = '<div class="scoreLine">' +
     							'<div class="scoreDesc">' + scoreDescription + '</div>' +
     							'<div class="scoreVal">' + scoreVal + '</div>' +
@@ -34,7 +34,9 @@ define([], function()
     	addScore("Triples", scores.triples);
     	addScore("Up and downs", scores.upAndDowns);
     	addScore("Acrosses", scores.acrosses);
-    	addScore("Unused bonuses", scores.unusedBonuses);
+        addScore("Unused bonuses", scores.unusedBonuses);
+        addScore("13's", scores.thirteens);
+        addScore("Opening 13's", scores.openingThirteens);
 
         this.$dlg.show();
 	};

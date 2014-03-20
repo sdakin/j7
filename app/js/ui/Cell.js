@@ -17,10 +17,18 @@ define([], function()
     };
 
     Cell.prototype.setBonus = function(flag) {
+        this.setPenalty(false);
         if (flag === undefined || flag === true)
             this.$ui.addClass("bonuscell");
         else
             this.$ui.removeClass("bonuscell");
+    };
+
+    Cell.prototype.setPenalty = function(flag) {
+        if (flag === undefined || flag === true)
+            this.$ui.addClass("penaltycell");
+        else
+            this.$ui.removeClass("penaltycell");
     };
 
     Cell.prototype.setValid = function(flag) {

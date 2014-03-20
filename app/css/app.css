@@ -73,6 +73,10 @@
 	background-color: goldenrod;
 }
 
+.penaltycell {
+	background-color: red;
+}
+
 .rollarea {
 	position: relative;
 }

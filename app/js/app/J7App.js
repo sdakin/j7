@@ -70,9 +70,8 @@ define(
         $cells.removeClass("playedcell");
         $cells.removeClass("bonuscell");
         $cells.removeClass("penaltycell");
-        var $gameControls = $("#controlArea").children();
-        $gameControls.last().hide();
-        $gameControls.first().show();
+        $(".inGameControls").show();
+        $(".gameOverControls").hide();
         self.onSpin();
     };
 
@@ -94,9 +93,9 @@ define(
 
     J7App.prototype.onGameOver = function() {
         var self = this;
-        var $gameControls = $("#controlArea").children();
-        $gameControls.first().hide();
-        $gameControls.last().show();
+
+        $(".inGameControls").hide();
+        $(".gameOverControls").show();
 
         // score unused bonuses
         var bonusStats = self.countBonuses();
@@ -426,17 +425,20 @@ define(
 
     J7App.prototype.updateStats = function() {
         var self = this;
-        
+
         $("#spinsVal").text(self.stats.spins);
         $("#bdgPass").text(self.stats.passes);
 
+        var bonusStats = self.countBonuses(),
+            bonusesAvailable = bonusStats.bonusesEarned.total - bonusStats.bonusesUsed;
+        $("#bdgBonuses").text(bonusesAvailable);
+        self.enableGameControls(bonusesAvailable > 0);
+
+        // TODO: move this to the BonusDetailsDlg
         var earnedNames = ["opening7s", "openingTriples", "triples", "upAndDown", "across"],
             usedNames = ["respins", "doubles", "increments", "decrements", "busts"];
         var $statLine = $('<div class="statLine"><div class="statName"></div><div class="statVal"></div></div>');
         var $statsUI, $newStatLine;
-
-        var bonusStats = self.countBonuses();
-        self.enableGameControls(bonusStats.bonusesEarned.total > bonusStats.bonusesUsed);
 
         $statsUI = $(".earnedBonusDetails");
         $statsUI.empty();

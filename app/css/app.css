@@ -112,6 +112,10 @@
 	color:#999;
 }
 
+#controlArea {
+	position: relative;
+}
+
 .inGameControls {
 	text-align: center;
 }
@@ -122,10 +126,6 @@
 
 .inGameControls button {
 	font-size: 12px;
-}
-
-.adjustments {
-	position: relative;
 }
 
 .btnBonusInfo {
@@ -255,4 +255,13 @@
 	display: table-cell;
 	padding-left: 5;
 	text-align: right;
+}
+
+#bonusDetails {
+	position: absolute;
+	top: 254;
+	left: 42;
+	padding: 10;
+	background-color: white;
+	border-radius: 6px;
 }

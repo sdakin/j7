@@ -53,6 +53,10 @@
 			</div>
 		</div>
 		<div id="controlArea">
+			<div class="btnBonusInfo">
+				<span id="bdgBonuses" class="badge">0</span>
+				<img src="img/info.png"/>
+			</div>
 			<div class="inGameControls">
 				<div class="adjustments">
 					<button id="btnSpin" type="button" class="btn btn-primary btn-sm">Respin</button>
@@ -60,15 +64,12 @@
 					<button id="btnInc" type="button" class="btn btn-primary btn-sm">+1</button>
 					<button id="btnDec" type="button" class="btn btn-primary btn-sm">-1</button>
 					<button id="btnBust" type="button" class="btn btn-primary btn-sm">Bust</button>
-					<div class="btnBonusInfo">
-						<span id="bdgBonuses" class="badge">0</span>
-						<img src="img/info.png"/>
-					</div>
 				</div>
 				<div style="padding-top:10px">
 					<button id="btnPass" type="button" class="btn btn-success btn-sm">
 						Pass<span id="bdgPass" class="badge">0</span>
 					</button>
+					<button id="btnCashOut" type="button" class="btn btn-success btn-sm">Cash Out</button>
 				</div>
 			</div>
 			<div class="gameOverControls" style="display:none">
@@ -76,26 +77,27 @@
 			</div>
 		</div>
 		<div id="gameStats"></div>
-		<div style="text-align:center">
-			<div style="display:inline-block;text-align:left">
-				<div id="bonusStats">
-					<div class="bonusGroup">
-						<div>Bonuses earned</div><div id="bonusesEarned"></div>
-						<div class="earnedBonusDetails"></div>
-					</div>
-					<div class="bonusGroup">
-						<div>Bonuses used</div><div id="bonusesUsed"></div>
-						<div class="usedBonusDetails"></div>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 	<div id="scoreDetailsDlg" class="modalOverlay">
 		<div id="scoreDetails"></div>
 	</div>
 	<div id="bonusDetailsDlg" class="modalOverlay">
-		<div id="bonusDetails"></div>
+		<div id="bonusDetails">
+			<div style="text-align:center">
+				<div style="display:inline-block;text-align:left">
+					<div id="bonusStats">
+						<div class="bonusGroup">
+							<div>Bonuses earned</div><div id="bonusesEarned"></div>
+							<div class="earnedBonusDetails"></div>
+						</div>
+						<div class="bonusGroup">
+							<div>Bonuses used</div><div id="bonusesUsed"></div>
+							<div class="usedBonusDetails"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div id="selectWheelDlg" class="modalOverlay">
 		<div id="selectWheel">

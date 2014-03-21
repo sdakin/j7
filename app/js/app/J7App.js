@@ -426,13 +426,14 @@ define(
 
     J7App.prototype.updateStats = function() {
         var self = this;
+        
+        $("#spinsVal").text(self.stats.spins);
+        $("#bdgPass").text(self.stats.passes);
+
         var earnedNames = ["opening7s", "openingTriples", "triples", "upAndDown", "across"],
             usedNames = ["respins", "doubles", "increments", "decrements", "busts"];
         var $statLine = $('<div class="statLine"><div class="statName"></div><div class="statVal"></div></div>');
         var $statsUI, $newStatLine;
-
-        $("#spinsVal").text(self.stats.spins);
-        $("#bdgPass").text(self.stats.passes);
 
         var bonusStats = self.countBonuses();
         self.enableGameControls(bonusStats.bonusesEarned.total > bonusStats.bonusesUsed);

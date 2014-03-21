@@ -73,6 +73,7 @@ define([], function()
         var $rollArea = $(".rollArea");
         var offset = $rollArea.offset();
         offset.top -= 44;
+        offset.left = 15;
         this.$dlg.offset(offset);
     };
 

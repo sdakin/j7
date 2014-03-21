@@ -109,7 +109,7 @@
 }
 
 .usedwheel {
-	color:lightgray;
+	color:#999;
 }
 
 .inGameControls {
@@ -193,8 +193,6 @@
 
 #selectWheel {
 	position: relative;
-	top: 112;
-	left: 0;
 	height: 150px;
 	background-color: white;
 	border-radius: 6px;

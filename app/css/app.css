@@ -45,6 +45,14 @@
 	border: solid 1px;
 	border-spacing: 1;
 	margin: auto;
+	position: relative;
+}
+
+.boardBackground {
+	position: absolute;
+	top: 0;
+	left: -17;
+	display: none;
 }
 
 .boardRow {

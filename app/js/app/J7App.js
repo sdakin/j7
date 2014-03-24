@@ -8,9 +8,11 @@ The main application module for the Jester's Sevens app.
 define(
     ["xlib/EventTarget", 
      "app/ScoreCounter", "app/SelectWheelDlg", "app/ScoreDetailsDlg", "app/BonusDetailsDlg",
-     "ui/Cell",
+     "ui/GameBoard", "ui/Cell",
      "jquery"],
-    function(EventTarget, ScoreCounter, SelectWheelDlg, ScoreDetailsDlg, BonusDetailsDlg, Cell)
+    function(EventTarget, 
+             ScoreCounter, SelectWheelDlg, ScoreDetailsDlg, BonusDetailsDlg, 
+             GameBoard, Cell)
 {
     "use strict";
 
@@ -45,24 +47,19 @@ define(
         $(".btnScoreInfo").click(function() { self.showScoreDetails(); });
         $(".btnBonusInfo").click(function() { self.showBonusDetails(); });
 
+        self.gameBoard = new GameBoard();
+
+        // testing:
+        self.gameBoard.setMarker(13, "penalty");
+        self.gameBoard.setMarker(7, "bonus");
+        self.gameBoard.setMarker(14, "bonus");
+        self.gameBoard.setMarker(21, "bonus");
+
         self.cells = [];
         for (var i = 1 ; i <= 21 ; i++)
             self.cells.push(new Cell(i));
 
         self.onNewGame();
-
-        // ***** cell marker testing
-        var $newBoard = $(".newBoard"), $cell = $(".cellMarker"), loc = $cell.offset();
-        for (var i = 0 ; i < 3 ; i++) {
-            for (var j = 0 ; j < 7 ; j++) {
-                var $newCell = $cell.clone();
-                $newBoard.append($newCell);
-                loc.top = 335 + (i * 45);
-                loc.left = 1 + (j * 45);
-                $newCell.offset(loc);
-            }
-        }
-        $cell.hide();
     };
 
     J7App.prototype.onNewGame = function(e) {

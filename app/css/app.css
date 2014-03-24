@@ -56,13 +56,9 @@
 	position: absolute;
 	top: 1;
 	left: 3;
-}
-
-.boardBackground {
-/*	position: absolute;
-	top: 0;
-	left: -17;
-	display: none; */
+	width: 45;
+	height: 45;
+	background-image: url('/img/played.png');
 }
 
 .boardRow {

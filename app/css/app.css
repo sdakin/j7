@@ -48,11 +48,21 @@
 	position: relative;
 }
 
-.boardBackground {
+.newBoard {
+	position: relative;
+}
+
+.cellMarker {
 	position: absolute;
+	top: 1;
+	left: 3;
+}
+
+.boardBackground {
+/*	position: absolute;
 	top: 0;
 	left: -17;
-	display: none;
+	display: none; */
 }
 
 .boardRow {

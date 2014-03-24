@@ -50,6 +50,19 @@ define(
             self.cells.push(new Cell(i));
 
         self.onNewGame();
+
+        // ***** cell marker testing
+        var $newBoard = $(".newBoard"), $cell = $(".cellMarker"), loc = $cell.offset();
+        for (var i = 0 ; i < 3 ; i++) {
+            for (var j = 0 ; j < 7 ; j++) {
+                var $newCell = $cell.clone();
+                $newBoard.append($newCell);
+                loc.top = 335 + (i * 45);
+                loc.left = 1 + (j * 45);
+                $newCell.offset(loc);
+            }
+        }
+        $cell.hide();
     };
 
     J7App.prototype.onNewGame = function(e) {

@@ -33,33 +33,25 @@ define(["ui/Cell"], function(Cell)
         var $validCells = $(".cellMarker.valid-Cell");
         $validCells.css("background-image", "");
         $validCells.removeClass("valid-cell");
-
-        // TODO: old cell handling
-        $(".boardCell").removeClass("validcell");
     };
 
     GameBoard.prototype.playCell = function(val) {
         var cell = this.getCell(val);
         if (cell)
             cell.setPlayed();
-
-        // TODO: old cell handling
-        var $cell = $(".boardCell[data-val=" + val + "]");
-        $cell.removeClass("validcell");
-        $cell.addClass("playedcell");
-    }
+    };
 
     GameBoard.prototype.setBonusCell = function(val) {
         var cell = this.getCell(val);
         if (cell)
             cell.setBonus();
-    }
+    };
 
     GameBoard.prototype.setPenaltyCell = function(val) {
         var cell = this.getCell(val);
         if (cell)
             cell.setPenalty();
-    }
+    };
 
     GameBoard.prototype.setValidCell = function(val) {
         var cell = this.getCell(val);

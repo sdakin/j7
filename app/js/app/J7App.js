@@ -323,7 +323,7 @@ define(
             });
 
             // the game is over when all cells have been played
-            var playedCells = $(".playedcell").length;
+            var playedCells = $(".played-cell").length;
             if (playedCells == $(".cellMarker").length) {
                 self.onGameOver();
             } else if (wheelsUsed == self.numWheels) {

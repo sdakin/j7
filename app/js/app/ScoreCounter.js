@@ -96,7 +96,7 @@ define([], function()
     };
 
     ScoreCounter.prototype.scoreCell = function(val) {
-        var row = this.valRow(val), pointVals = [15, 10, 25],
+        var row = this.valRow(val) - 1, pointVals = [15, 10, 25],
             categories = ["lower row", "middle row", "upper row"],
             points = pointVals[row];
         this.scores.cells[categories[row]] += points;
@@ -123,7 +123,7 @@ define([], function()
 
     ScoreCounter.prototype.scoreTriple = function(val, inOpeningBonus) {
         var bonuses = [25, 50, 100],
-            bonusPts = 3 * bonuses[this.valRow(val)];
+            bonusPts = 3 * bonuses[this.valRow(val) - 1];
         if (inOpeningBonus) {
             bonusPts *= 2;
             this.scores.openingTriples += bonusPts;

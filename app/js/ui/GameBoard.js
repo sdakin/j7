@@ -1,4 +1,4 @@
-define([], function()
+define(["ui/Cell"], function(Cell)
 {
     "use strict";
 
@@ -9,21 +9,62 @@ define([], function()
         var boardPos = this.$ui.position(), loc = {};
         for (var i = 0 ; i < 3 ; i++) {
             for (var j = 0 ; j < 7 ; j++) {
-                var $newCell = $('<div class="cellMarker"></div>');
-                this.cells[2 - i][j] = $newCell;
-                this.$ui.append($newCell);
+                var val = (2 - i) * 7 + j + 1;
+                var newCell = new Cell(val);
+                this.cells[2 - i][j] = newCell;
+                this.$ui.append(newCell.$ui);
                 loc.top = boardPos.top + (i * 45) + 1;
                 loc.left = boardPos.left + (j * 45) + 1;
-                $newCell.offset(loc);
+                newCell.$ui.offset(loc);
             }
         }
     }
 
-    GameBoard.prototype.setMarker = function(val, type) {
+    GameBoard.prototype.getCell = function(val) {
+        var $result = null;
         if (val > 0 && val <= 21) {
             var row = Math.floor((val - 1) / 7), col = (val - 1) % 7;
-            var $cell = this.cells[row][col];
-            $cell.css("background-image", "url(/img/" + type + ".png)");
+            $result = this.cells[row][col];
+        }
+        return $result;
+    };
+
+    GameBoard.prototype.clearValidCells = function() {
+        var $validCells = $(".cellMarker.valid-Cell");
+        $validCells.css("background-image", "");
+        $validCells.removeClass("valid-cell");
+
+        // TODO: old cell handling
+        $(".boardCell").removeClass("validcell");
+    };
+
+    GameBoard.prototype.playCell = function(val) {
+        var cell = this.getCell(val);
+        if (cell)
+            cell.setPlayed();
+
+        // TODO: old cell handling
+        var $cell = $(".boardCell[data-val=" + val + "]");
+        $cell.removeClass("validcell");
+        $cell.addClass("playedcell");
+    }
+
+    GameBoard.prototype.setBonusCell = function(val) {
+        var cell = this.getCell(val);
+        if (cell)
+            cell.setBonus();
+    }
+
+    GameBoard.prototype.setPenaltyCell = function(val) {
+        var cell = this.getCell(val);
+        if (cell)
+            cell.setPenalty();
+    }
+
+    GameBoard.prototype.setValidCell = function(val) {
+        var cell = this.getCell(val);
+        if (cell && !cell.isPlayed()) {
+            cell.setValid(true);
         }
     };
 

@@ -8,11 +8,11 @@ The main application module for the Jester's Sevens app.
 define(
     ["xlib/EventTarget", 
      "app/ScoreCounter", "app/SelectWheelDlg", "app/ScoreDetailsDlg", "app/BonusDetailsDlg",
-     "ui/GameBoard", "ui/Cell",
+     "ui/GameBoard", "ui/OldCell",
      "jquery"],
     function(EventTarget, 
              ScoreCounter, SelectWheelDlg, ScoreDetailsDlg, BonusDetailsDlg, 
-             GameBoard, Cell)
+             GameBoard, OldCell)
 {
     "use strict";
 
@@ -49,15 +49,10 @@ define(
 
         self.gameBoard = new GameBoard();
 
-        // testing:
-        self.gameBoard.setMarker(13, "penalty");
-        self.gameBoard.setMarker(7, "bonus");
-        self.gameBoard.setMarker(14, "bonus");
-        self.gameBoard.setMarker(21, "bonus");
-
+        // TODO: old cell handling
         self.cells = [];
         for (var i = 1 ; i <= 21 ; i++)
-            self.cells.push(new Cell(i));
+            self.cells.push(new OldCell(i));
 
         self.onNewGame();
     };
@@ -119,10 +114,9 @@ define(
 
     J7App.prototype.onCellClick = function(e) {
         var self = this;
-        var cellVal = parseInt($(e.target).text()), checkVal = cellVal;
+        var cellVal = parseInt($(e.target).attr("data-val")), checkVal = cellVal;
 
-        $(e.target).removeClass("validcell");
-        $(e.target).addClass("playedcell");
+        self.gameBoard.playCell(cellVal);
         self.scoreCounter.scoreCell(cellVal);
 
         function checkCells(indices) {
@@ -147,7 +141,8 @@ define(
 
         // check up&down bonus
         var colIdx = self.scoreCounter.valCol(cellVal);
-        var c1 = self.cells[colIdx], c2 = self.cells[colIdx + 7], c3 = self.cells[colIdx + 14];
+        var c1 = self.gameBoard.getCell(colIdx), c2 = self.gameBoard.getCell(colIdx + 7),
+            c3 = self.gameBoard.getCell(colIdx + 14);
         if (c1.isPlayed() && c2.isPlayed() && c3.isPlayed()) {
             c1.setBonus(); c2.setBonus(); c3.setBonus();
             self.scoreCounter.scoreUpAndDown(colIdx);
@@ -156,13 +151,13 @@ define(
         // check across bonus
         var rowIdx = self.scoreCounter.valRow(cellVal);
         var i, count = 0;
-        for (i = rowIdx * 7 ; i < (rowIdx + 1) * 7 ; i++) {
-            if (self.cells[i].isPlayed())
+        for (i = (rowIdx - 1) * 7 + 1 ; i <= rowIdx * 7 ; i++) {
+            if (self.gameBoard.getCell(i).isPlayed())
                 count++;
         }
         if (count == 7) {
-            for (i = rowIdx * 7 ; i < (rowIdx + 1) * 7 ; i++)
-                self.cells[i].setBonus();
+            for (i = (rowIdx - 1) * 7 + 1 ; i <= rowIdx * 7 ; i++)
+                self.gameBoard.getCell(i).setBonus();
             self.scoreCounter.scoreAcross(rowIdx);
         }
 
@@ -230,8 +225,9 @@ define(
         };
 
         // count filled columns
-        for (i = 0 ; i < 7 ; i++) {
-            var c1 = self.cells[i], c2 = self.cells[i + 7], c3 = self.cells[i + 14];
+        for (i = 1 ; i <= 7 ; i++) {
+            var c1 = self.gameBoard.getCell(i), c2 = self.gameBoard.getCell(i + 7),
+                c3 = self.gameBoard.getCell(i + 14);
             if (c1.isPlayed() && c2.isPlayed() && c3.isPlayed()) {
                 result.bonusesEarned.upAndDown++;
             }
@@ -240,8 +236,8 @@ define(
         // count filled rows
         for (i = 0 ; i < 3 ; i++) {
             var count = 0;
-            for (var j = i * 7 ; j < (i + 1) * 7 ; j++) {
-                if (self.cells[j].isPlayed())
+            for (var j = i * 7 + 1 ; j <= (i + 1) * 7 ; j++) {
+                if (self.gameBoard.getCell(j).isPlayed())
                     count++;
             }
             if (count == 7) {
@@ -266,6 +262,9 @@ define(
     J7App.prototype.markPlayedCellsAsBonus = function() {
         var self = this;
         self.curPlay.cellsPlayed.forEach(function(cellVal) {
+            self.gameBoard.setBonusCell(cellVal);
+            
+            // TODO: old cell handling
             self.cells[cellVal - 1].setBonus();
         });
     };
@@ -273,6 +272,9 @@ define(
     J7App.prototype.markPlayedCellsAsPenalty = function() {
         var self = this;
         self.curPlay.cellsPlayed.forEach(function(cellVal) {
+            self.gameBoard.setPenaltyCell(cellVal);
+            
+            // TODO: old cell handling
             self.cells[cellVal - 1].setPenalty();
         });
     };
@@ -288,8 +290,9 @@ define(
 
     J7App.prototype.setValidCells = function() {
         var self = this;
-        $(".boardCell").unbind("click");
-        $(".boardCell").removeClass("validcell");
+
+        $(".cellMarker").unbind("click");
+        self.gameBoard.clearValidCells();
 
         function checkWheels(indices) {
             var valid = true, sum = 0;
@@ -298,6 +301,9 @@ define(
                 sum += self.wheels[index].val;
             });
             if (valid && sum > 0 && sum <= 21) {
+                self.gameBoard.setValidCell(sum);
+
+                // TODO: old cell handling
                 var cell = self.cells[sum - 1];
                 if (!cell.isPlayed())
                     cell.setValid();
@@ -308,7 +314,7 @@ define(
         checkWheels([0,1]); checkWheels([0,2]); checkWheels([1,2]);
         checkWheels([0,1,2]);
 
-        var $validCells = $(".validcell");
+        var $validCells = $(".valid-cell");
         if ($validCells.length === 0) {
             var wheelsUsed = 0;
             this.wheels.forEach(function(wheel) {
@@ -318,7 +324,7 @@ define(
 
             // the game is over when all cells have been played
             var playedCells = $(".playedcell").length;
-            if (playedCells == $(".boardCell").length) {
+            if (playedCells == $(".cellMarker").length) {
                 self.onGameOver();
             } else if (wheelsUsed == self.numWheels) {
                 self.onEndSpin();

@@ -73,14 +73,14 @@ define([], function()
         this.$scoreUI.text(val);
     };
 
-    // returns the ordinal column index (0..6) of the specified value
+    // returns the ordinal position of the column (1..7) of the specified value
     ScoreCounter.prototype.valCol = function(val) {
-        return ((val - 1) % 7);
+        return ((val - 1) % 7) + 1;
     };
 
-    // returns the ordinal row index (0, 1, 2) of the specified value
+    // returns the ordinal position of the row (1, 2, 3) of the specified value
     ScoreCounter.prototype.valRow = function(val) {
-        return Math.floor((val - 1) / 7);
+        return Math.floor((val - 1) / 7) + 1;
     };
 
     ScoreCounter.prototype.scoreAcross = function(rowIndex) {

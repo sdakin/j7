@@ -48,12 +48,6 @@ define(
         $(".btnBonusInfo").click(function() { self.showBonusDetails(); });
 
         self.gameBoard = new GameBoard();
-
-        // TODO: old cell handling
-        self.cells = [];
-        for (var i = 1 ; i <= 21 ; i++)
-            self.cells.push(new OldCell(i));
-
         self.onNewGame();
     };
 
@@ -71,10 +65,7 @@ define(
         };
         self.scoreCounter.startGame();
         self.curPlay = null;
-        var $cells = $(".boardCell");
-        $cells.removeClass("playedcell");
-        $cells.removeClass("bonuscell");
-        $cells.removeClass("penaltycell");
+        self.gameBoard.clearBoard();
         $(".inGameControls").show();
         $(".gameOverControls").hide();
         self.onSpin();
@@ -263,9 +254,6 @@ define(
         var self = this;
         self.curPlay.cellsPlayed.forEach(function(cellVal) {
             self.gameBoard.setBonusCell(cellVal);
-            
-            // TODO: old cell handling
-            self.cells[cellVal - 1].setBonus();
         });
     };
 
@@ -273,9 +261,6 @@ define(
         var self = this;
         self.curPlay.cellsPlayed.forEach(function(cellVal) {
             self.gameBoard.setPenaltyCell(cellVal);
-            
-            // TODO: old cell handling
-            self.cells[cellVal - 1].setPenalty();
         });
     };
 
@@ -302,11 +287,6 @@ define(
             });
             if (valid && sum > 0 && sum <= 21) {
                 self.gameBoard.setValidCell(sum);
-
-                // TODO: old cell handling
-                var cell = self.cells[sum - 1];
-                if (!cell.isPlayed())
-                    cell.setValid();
             }
         }
 

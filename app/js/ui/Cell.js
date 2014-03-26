@@ -6,8 +6,11 @@ define([], function()
         this.$ui = $('<div class="cellMarker" data-val="' + initVal + '"></div>');
     }
 
-    function setState(flag, $ui, img, className) {
-    }
+    Cell.prototype.reset = function() {
+        this.$ui.removeClass();
+        this.$ui.addClass("cellMarker");
+        this.$ui.css("background-image", "");
+    };
 
     Cell.prototype.isBonus = function() {
         return this.$ui.hasClass("bonus-cell");

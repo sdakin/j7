@@ -20,6 +20,14 @@ define(["ui/Cell"], function(Cell)
         }
     }
 
+    GameBoard.prototype.clearBoard = function() {
+        this.cells.forEach(function(cellRow) {
+            cellRow.forEach(function(cell) {
+                cell.reset();
+            });
+        });
+    };
+
     GameBoard.prototype.getCell = function(val) {
         var $result = null;
         if (val > 0 && val <= 21) {

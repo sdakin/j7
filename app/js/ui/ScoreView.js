@@ -1,4 +1,4 @@
-define(["app/ScoreCounter"], function(ScoreCounter)
+define(["data/ScoreCounter"], function(ScoreCounter)
 {
     "use strict";
 

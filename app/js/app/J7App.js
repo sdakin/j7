@@ -7,12 +7,14 @@ The main application module for the Jester's Sevens app.
 **/
 define(
     ["xlib/EventTarget", 
-     "app/ScoreCounter", "app/SelectWheelDlg", "app/ScoreDetailsDlg", "app/BonusDetailsDlg",
+     "data/ScoreCounter",
      "ui/GameBoard", "ui/ScoreView",
+     "app/SelectWheelDlg", "app/ScoreDetailsDlg", "app/BonusDetailsDlg",
      "jquery"],
     function(EventTarget, 
-             ScoreCounter, SelectWheelDlg, ScoreDetailsDlg, BonusDetailsDlg, 
-             GameBoard, ScoreView)
+             ScoreCounter, 
+             GameBoard, ScoreView,
+             SelectWheelDlg, ScoreDetailsDlg, BonusDetailsDlg)
 {
     "use strict";
 

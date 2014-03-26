@@ -199,7 +199,7 @@
 #selectPrompt {
 	position: absolute;
 	top: 10;
-	width: 284;
+	width: 320;
 	font-size: 24;
 	text-align: center;
 }
@@ -214,12 +214,12 @@
 #btnCancel {
 	position: relative;
 	top: 108;
-	right: -108;
+	right: -125;
 }
 
 #btnWheel1 {
 	position: absolute;
-	left: 56;
+	left: 71;
 	top: 51;
 	width: 50px;
 	height: 50px;
@@ -228,7 +228,7 @@
 
 #btnWheel2 {
 	position: absolute;
-	left: 120;
+	left: 135;
 	top: 51;
 	width: 50px;
 	height: 50px;
@@ -237,7 +237,7 @@
 
 #btnWheel3 {
 	position: absolute;
-	left: 184;
+	left: 199;
 	top: 51;
 	width: 50px;
 	height: 50px;

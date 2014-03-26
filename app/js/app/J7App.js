@@ -47,6 +47,7 @@ define(
         $(".inGameControls button").click(function(e) { self.onGameControlClick(e); });
         $("#btnPass").click(function() { self.onPass(); });
         $("#btnNewGame").click(function(e) { self.onNewGame(); });
+        $("#btnCashOut").click(function(e) { self.onCashOut(); });
         $(".btnScoreInfo").click(function() { self.showScoreDetails(); });
         $(".btnBonusInfo").click(function() { self.showBonusDetails(); });
 
@@ -72,6 +73,10 @@ define(
         $(".inGameControls").show();
         $(".gameOverControls").hide();
         self.onSpin();
+    };
+
+    J7App.prototype.onCashOut = function() {
+        debugger;
     };
 
     J7App.prototype.onEndSpin = function() {

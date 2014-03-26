@@ -53,7 +53,7 @@ define([], function()
     SelectWheelDlg.prototype.show = function (type) {
         var self = this;
         self.mode = type;
-        var $board = $(".board"), boardPos = $board.offset(),
+        var $board = $(".newBoard"), boardPos = $board.offset(),
             boardWidth = $board.outerWidth(), boardHeight = $board.outerHeight();
         var $selector = $("#selectWheel");
         var $wheelSelectors = $selector.find('button:not(:last)'), $wheels = $(".wheel");
@@ -73,7 +73,7 @@ define([], function()
         var $rollArea = $(".rollArea");
         var offset = $rollArea.offset();
         offset.top -= 44;
-        offset.left = 15;
+        offset.left = 0;
         this.$dlg.offset(offset);
     };
 

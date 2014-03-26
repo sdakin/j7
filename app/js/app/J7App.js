@@ -8,11 +8,11 @@ The main application module for the Jester's Sevens app.
 define(
     ["xlib/EventTarget", 
      "app/ScoreCounter", "app/SelectWheelDlg", "app/ScoreDetailsDlg", "app/BonusDetailsDlg",
-     "ui/GameBoard", "ui/OldCell",
+     "ui/GameBoard", "ui/ScoreView",
      "jquery"],
     function(EventTarget, 
              ScoreCounter, SelectWheelDlg, ScoreDetailsDlg, BonusDetailsDlg, 
-             GameBoard, OldCell)
+             GameBoard, ScoreView)
 {
     "use strict";
 
@@ -27,9 +27,10 @@ define(
 
         this.numWheels = 3;
         this.wheels = [];
-        this.scoreCounter = new ScoreCounter();
         for (var i = 0 ; i < this.numWheels ; i++)
             this.wheels.push({val:0, used:false});
+        this.scoreCounter = new ScoreCounter();
+        this.scoreView = new ScoreView(this.scoreCounter);
     }
 
     J7App.prototype = new EventTarget();

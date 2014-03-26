@@ -1,4 +1,5 @@
 clean up bonuses earned/used display (use popup like score details)
+	add 13s penalty handling
 add a "cash out" button to end the game if you can't finish but have unused bonuses
 scrolling points scoring display
 

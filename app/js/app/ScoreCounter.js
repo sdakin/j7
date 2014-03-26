@@ -1,11 +1,17 @@
-define([], function()
+define(["xlib/EventTarget"], function(EventTarget)
 {
     "use strict";
 
     function ScoreCounter() {
-        this.$scoreUI = $("#scoreVal");
+        EventTarget.call(this);
         this.startGame();
     }
+
+    ScoreCounter.prototype = new EventTarget();
+    ScoreCounter.prototype.constructor = ScoreCounter;
+
+    ScoreCounter.OPENINGBONUS_CHANGED = "OpeningBonusChanged";
+    ScoreCounter.SCORE_CHANGED = "ScoreChanged";
 
     ScoreCounter.prototype.checkOpeningBonus = function(wheels, plays) {
         function checkSpin(spin, includePass) {
@@ -31,17 +37,24 @@ define([], function()
             });
         }
 
-        if (isBonus) {
-            $("#openingBonus").show();
-        } else {
-            $("#openingBonus").hide();
-        }
+        this.setOpeningBonus(isBonus);
         return isBonus;
+    };
+
+    ScoreCounter.prototype.setOpeningBonus = function(flag) {
+        if (flag !== this.openingBonus) {
+            this.openingBonus = flag;
+            var event = {
+                type: ScoreCounter.OPENINGBONUS_CHANGED,
+                bonus: flag
+            };
+            this.fire(event);
+        }
     };
 
     ScoreCounter.prototype.startGame = function() {
         this.setScore(0);
-        this.openingBonus = true;
+        this.setOpeningBonus(true);
         this.rowsPlayed = [];
         this.colsPlayed = [];
         this.opening7sBonus = 100;
@@ -70,7 +83,11 @@ define([], function()
 
     ScoreCounter.prototype.setScore = function(val) {
         this.score = val;
-        this.$scoreUI.text(val);
+        var event = {
+            type: ScoreCounter.SCORE_CHANGED,
+            score: val
+        };
+        this.fire(event);
     };
 
     // returns the ordinal position of the column (1..7) of the specified value

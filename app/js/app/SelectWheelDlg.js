@@ -34,7 +34,7 @@ define([], function()
             case "-1":
                 curVal--; self.app.useAdjustment("decrements"); break;
             case "bust":
-                self.app.useWheel(index);
+                self.app.useWheel(index, true);
                 self.app.useAdjustment("busts");
                 break;
         }

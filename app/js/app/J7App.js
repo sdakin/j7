@@ -25,7 +25,7 @@ define(
     function J7App() {
         EventTarget.call(this);
 
-        // this.debugSpins = [ [3,5,5], [4,4,4], [7,7,7], [5,2,1], [3,7,4] ];
+        // this.debugSpins = [ [4,4,4], [3,5,5], [6,6,1], [7,7,7], [5,2,1], [3,7,4] ];
 
         this.numWheels = 3;
         this.wheels = [];
@@ -184,8 +184,8 @@ define(
 
     J7App.prototype.checkThirteen = function(inOpeningBonus) {
         var self = this;
-        var sum = self.wheels[0].val + self.wheels[1].val + self.wheels[2].val;
-        if (sum == 13) {
+        var sum = self.getPlayedVal(0) + self.getPlayedVal(1) + self.getPlayedVal(2);
+        if (sum === 13) {
             self.markPlayedCellsAsPenalty();
             if (inOpeningBonus)
                 self.stats.opening13s++;
@@ -255,6 +255,13 @@ define(
         }
         result.bonusesEarned.total = totalBonuses;
 
+        return result;
+    };
+
+    J7App.prototype.getPlayedVal = function(wheelNum) {
+        var result = 0, self = this;
+        if (self.wheels[wheelNum].used && !self.wheels[wheelNum].busted)
+            result = self.wheels[wheelNum].val;
         return result;
     };
 
@@ -337,12 +344,14 @@ define(
         }
     };
 
-    J7App.prototype.useWheel = function(index) {
+    J7App.prototype.useWheel = function(index, busted) {
         var $wheels = $(".wheel");
         if (index >= 0 && index < $wheels.length) {
             var $wheel = $($wheels[index]);
             $wheel.addClass("usedwheel");
             this.wheels[index].used = true;
+            if (busted)
+                this.wheels[index].busted = busted;
         }
     };
 

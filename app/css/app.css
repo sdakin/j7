@@ -1,4 +1,5 @@
 .gametable {
+	position: relative;
 	display: inline-block;
 	background-image: url('/img/bg.png');
 	width: 320;
@@ -134,7 +135,11 @@
 }
 
 .gameOverControls {
+	display: table-cell;
+	width: 320px;
+	height: 73px;
 	text-align: center;
+	vertical-align: middle;
 }
 
 .inGameControls button {
@@ -148,8 +153,18 @@
 	cursor: pointer;
 }
 
-#gameStats {
-	padding-top: 10px;
+#scoreTicker {
+	position: absolute;
+	bottom: 10;
+}
+
+.tickerText {
+	margin-left: 8px;
+	width: 301px;
+	height: 120px;
+	text-align: center;
+	resize: none;
+	background-color: white;
 }
 
 .statLine {

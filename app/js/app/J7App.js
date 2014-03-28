@@ -399,6 +399,7 @@ define(
 
     J7App.prototype.onPass = function() {
         var self = this;
+        self.scoreView.addTickerText(self.stats.spins, "Spin passed");
         self.stats.passes += 1;
         self.curPlay.pass = true;
         self.updateStats();

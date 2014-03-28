@@ -8,6 +8,7 @@ define(["data/ScoreCounter"], function(ScoreCounter)
         self.model = initModel;
         self.$bonusUI = $("#openingBonus");
         self.$scoreUI = $("#scoreVal");
+        self.$tickerUI = $(".tickerText");
 
         self.model.addListener(ScoreCounter.OPENINGBONUS_CHANGED, function(e) {
             self.handleOpeningBonusChanged(e);
@@ -22,6 +23,18 @@ define(["data/ScoreCounter"], function(ScoreCounter)
         self.handleOpeningBonusChanged({bonus:self.model.openingBonus});
         self.handleScoreChanged({score:self.model.score});
     }
+
+    ScoreView.prototype.addTickerText = function(spinNum, text) {
+        var self = this;
+        if (spinNum != self.spinNum) {
+            self.$tickerUI.val("");
+            self.spinNum = spinNum;
+        }
+        var tickerText = self.$tickerUI.val();
+        if (tickerText && tickerText.length > 0) tickerText += "\n";
+        tickerText += text;
+        self.$tickerUI.val(tickerText);
+    };
 
     ScoreView.prototype.handleOpeningBonusChanged = function(event) {
         if (event.bonus) {

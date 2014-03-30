@@ -67,7 +67,7 @@ define(
             thirteens: 0,
             opening13s: 0
         };
-        self.scoreCounter.startGame();
+        self.scoreCounter.startGame(self.stats);
         self.curPlay = null;
         self.gameBoard.clearBoard();
         $(".inGameControls").show();

@@ -12,6 +12,7 @@ define(["xlib/EventTarget"], function(EventTarget)
 
     ScoreCounter.OPENINGBONUS_CHANGED = "OpeningBonusChanged";
     ScoreCounter.SCORE_CHANGED = "ScoreChanged";
+    ScoreCounter.SCORE_MESSAGE = "ScoreMessage";
 
     ScoreCounter.prototype.checkOpeningBonus = function(wheels, plays) {
         function checkSpin(spin, includePass) {
@@ -52,7 +53,7 @@ define(["xlib/EventTarget"], function(EventTarget)
         }
     };
 
-    ScoreCounter.prototype.startGame = function() {
+    ScoreCounter.prototype.startGame = function(initGameStats) {
         this.setScore(0);
         this.setOpeningBonus(true);
         this.rowsPlayed = [];
@@ -75,6 +76,7 @@ define(["xlib/EventTarget"], function(EventTarget)
             openingThirteens: 0,
             thirteens: 0
         };
+        this.gameStats = initGameStats;
     };
 
     ScoreCounter.prototype.addToScore = function(amount) {
@@ -118,12 +120,23 @@ define(["xlib/EventTarget"], function(EventTarget)
             points = pointVals[row];
         this.scores.cells[categories[row]] += points;
         this.addToScore(points);
+        this.scoreMessage("" + val + " covered for " + points + " points");
+    };
+
+    ScoreCounter.prototype.scoreMessage = function(message) {
+        var e = {
+            type: ScoreCounter.SCORE_MESSAGE,
+            spinNum: this.gameStats.spins,
+            msg: message
+        };
+        this.fire(e);
     };
 
     ScoreCounter.prototype.scoreOpeningSevens = function() {
         var self= this;
         self.scores.opening7s += self.opening7sBonus;
         self.addToScore(self.opening7sBonus);
+        self.scoreMessage("Opening sevens bonus for " + self.opening7sBonus + " points");
         self.opening7sBonus *= 2;
     };
 

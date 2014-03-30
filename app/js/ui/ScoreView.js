@@ -18,6 +18,10 @@ define(["data/ScoreCounter"], function(ScoreCounter)
             self.handleScoreChanged(e);
         });
 
+        self.model.addListener(ScoreCounter.SCORE_MESSAGE, function(e) {
+            self.handleScoreMessage(e);
+        });
+
         // force a firing of the two events we're listening for
         // to ensure the correct initial state
         self.handleOpeningBonusChanged({bonus:self.model.openingBonus});
@@ -46,6 +50,10 @@ define(["data/ScoreCounter"], function(ScoreCounter)
 
     ScoreView.prototype.handleScoreChanged = function(event) {
         this.$scoreUI.text(event.score);
+    };
+
+    ScoreView.prototype.handleScoreMessage = function(event) {
+        this.addTickerText(event.spinNum, event.msg);
     };
 
     return ScoreView;

@@ -111,6 +111,7 @@ define(["xlib/EventTarget"], function(EventTarget)
         this.rowsPlayed.push(rowIndex);
         var bonus = 100, bonusPts = (rowIndex + 1) * bonus - (lowerPlayed * bonus);
         this.scores.acrosses += bonusPts;
+        this.scoreMessage("Across bonus for " + bonusPts + " points");
         this.addToScore(bonusPts);
     };
 
@@ -148,6 +149,7 @@ define(["xlib/EventTarget"], function(EventTarget)
             this.scores.thirteens += this.thirteenPenalty;
         }
         this.addToScore(this.thirteenPenalty);
+        this.scoreMessage("Thirteen penalty of " + this.thirteenPenalty + " points");
         this.thirteenPenalty *= 2;
     };
 
@@ -159,6 +161,7 @@ define(["xlib/EventTarget"], function(EventTarget)
             this.scores.openingTriples += bonusPts;
         } else
             this.scores.triples += bonusPts;
+        this.scoreMessage("Triples bonus for " + bonusPts + " points");
         this.addToScore(bonusPts);
     };
 
@@ -181,6 +184,7 @@ define(["xlib/EventTarget"], function(EventTarget)
         this.colsPlayed.push(colIndex);
         var bonus = 25, bonusPts = (colIndex + 1) * bonus - (lowerPlayed * bonus);
         this.scores.upAndDowns += bonusPts;
+        this.scoreMessage("Up & down bonus for " + bonusPts + " points");
         this.addToScore(bonusPts);
     };
 

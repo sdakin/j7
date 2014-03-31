@@ -25,7 +25,7 @@ define(
     function J7App() {
         EventTarget.call(this);
 
-        // this.debugSpins = [ [4,4,4], [3,5,5], [6,6,1], [7,7,7], [5,2,1], [3,7,4] ];
+        // this.debugSpins = [ [1,2,3], [1,2,3], [2,2,5], [1,2,2], [5,2,1], [3,7,4] ];
 
         this.numWheels = 3;
         this.wheels = [];
@@ -109,6 +109,8 @@ define(
         self.updateStats();
 
         // TODO: save the stats
+
+        self.scoreView.addTickerText(self.stats.spins, "G A M E   O V E R");
     };
 
     J7App.prototype.onCellClick = function(e) {
@@ -312,7 +314,7 @@ define(
         var $validCells = $(".valid-cell");
         if ($validCells.length === 0) {
             var wheelsUsed = 0;
-            this.wheels.forEach(function(wheel) {
+            self.wheels.forEach(function(wheel) {
                 if (wheel.used)
                     wheelsUsed++;
             });
@@ -325,8 +327,21 @@ define(
                 self.onEndSpin();
                 self.onSpin();
             } else {
+                var gameOver = true;    // assume the worst
                 var bonusStats = self.countBonuses();
-                if (bonusStats.bonusesEarned.total == bonusStats.bonusesUsed)
+                if (bonusStats.bonusesEarned.total > bonusStats.bonusesUsed) {
+                    gameOver = false;
+                } else {
+                    if (wheelsUsed == 0) {
+                        var canPass = ($("#btnPass").attr("disabled") != "disabled");
+                        if (canPass) {
+                            gameOver = false;
+                            var msg = "No valid plays but you can pass";
+                            self.scoreView.addTickerText(self.stats.spins, msg);
+                        }
+                    }
+                }
+                if (gameOver)
                     self.onGameOver();
             }
         } else {

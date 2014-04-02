@@ -70,6 +70,7 @@ define(
         self.scoreCounter.startGame(self.stats);
         self.curPlay = null;
         self.gameBoard.clearBoard();
+        self.scoreView.clear();
         $(".inGameControls").show();
         $(".gameOverControls").hide();
         self.onSpin();
@@ -464,36 +465,35 @@ define(
         self.enableGameControls(bonusesAvailable > 0);
 
         // TODO: move this to the BonusDetailsDlg
+        function statLine(name, val) {
+            var line = $('<div class="statLine"><div class="statName"></div><div class="statVal"></div></div>');
+            line.find(".statName").text(name);
+            line.find(".statVal").text(val);
+            if (name === "Total") {
+                line.find(".statName").css("border-top", "1px solid black");
+                line.find(".statVal").css("border-top", "1px solid black");
+            }
+            return line;
+        }
+
         var earnedNames = ["opening7s", "openingTriples", "triples", "upAndDown", "across"],
-            usedNames = ["respins", "doubles", "increments", "decrements", "busts"];
-        var $statLine = $('<div class="statLine"><div class="statName"></div><div class="statVal"></div></div>');
-        var $statsUI, $newStatLine;
+            usedNames = ["respins", "doubles", "increments", "decrements", "busts", "thirteens"];
+        var $statsUI;
 
         $statsUI = $(".earnedBonusDetails");
         $statsUI.empty();
         earnedNames.forEach(function(name) {
-            $newStatLine = $statLine.clone();
-            $newStatLine.find(".statName").text(name);
-            $newStatLine.find(".statVal").text((bonusStats.bonusesEarned[name] || 0));
-            $statsUI.append($newStatLine);
+            $statsUI.append(statLine(name, (bonusStats.bonusesEarned[name] || 0)));
         });
-        $newStatLine = $statLine.clone();
-        $newStatLine.find(".statName").text("Total");
-        $newStatLine.find(".statVal").text((bonusStats.bonusesEarned.total || 0));
-        $statsUI.append($newStatLine);
+        $statsUI.append(statLine(" ", " "));
+        $statsUI.append(statLine("Total", (bonusStats.bonusesEarned.total || 0)));
 
         $statsUI = $(".usedBonusDetails");
         $statsUI.empty();
         usedNames.forEach(function(name) {
-            $newStatLine = $statLine.clone();
-            $newStatLine.find(".statName").text(name);
-            $newStatLine.find(".statVal").text((self.stats[name] || 0));
-            $statsUI.append($newStatLine);
+            $statsUI.append(statLine(name, (self.stats[name] || 0)));
         });
-        $newStatLine = $statLine.clone();
-        $newStatLine.find(".statName").text("Total");
-        $newStatLine.find(".statVal").text(bonusStats.bonusesUsed);
-        $statsUI.append($newStatLine);
+        $statsUI.append(statLine("Total", bonusStats.bonusesUsed));
     };
 
     J7App.prototype.useAdjustment = function(type) {

@@ -40,6 +40,10 @@ define(["data/ScoreCounter"], function(ScoreCounter)
         self.$tickerUI.val(tickerText);
     };
 
+    ScoreView.prototype.clear = function() {
+        this.$tickerUI.val("");
+    };
+
     ScoreView.prototype.handleOpeningBonusChanged = function(event) {
         if (event.bonus) {
             this.$bonusUI.show();

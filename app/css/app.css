@@ -161,14 +161,16 @@
 .tickerText {
 	margin-left: 8px;
 	width: 301px;
-	height: 120px;
+	height: 124px;
 	text-align: center;
+	font-size: 14px;
 	resize: none;
 	background-color: white;
 }
 
 .statLine {
 	display: table-row;
+	height: 22px;
 }
 
 .statName {
@@ -288,8 +290,7 @@
 #bonusDetails {
 	position: absolute;
 	top: 268;
-	left: 42;
-	padding: 10;
+	left: 64;
 	background-color: white;
 	border-radius: 6px;
 }

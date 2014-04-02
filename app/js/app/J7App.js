@@ -147,7 +147,7 @@ define(
             c3 = self.gameBoard.getCell(colIdx + 14);
         if (c1.isPlayed() && c2.isPlayed() && c3.isPlayed()) {
             c1.setBonus(); c2.setBonus(); c3.setBonus();
-            self.scoreCounter.scoreUpAndDown(colIdx);
+            self.scoreCounter.scoreUpAndDown(colIdx - 1);
         }
 
         // check across bonus
@@ -160,7 +160,7 @@ define(
         if (count == 7) {
             for (i = (rowIdx - 1) * 7 + 1 ; i <= rowIdx * 7 ; i++)
                 self.gameBoard.getCell(i).setBonus();
-            self.scoreCounter.scoreAcross(rowIdx);
+            self.scoreCounter.scoreAcross(rowIdx - 1);
         }
 
         self.curPlay.cellsPlayed.push(cellVal);

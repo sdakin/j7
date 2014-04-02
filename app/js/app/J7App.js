@@ -247,7 +247,7 @@ define(
             }
         }
 
-        var bonusNames = ["respins", "doubles", "increments", "decrements", "busts"];
+        var bonusNames = ["respins", "doubles", "increments", "decrements", "busts", "thirteens"];
         bonusNames.forEach(function(name) {
             result.bonusesUsed += (self.stats[name] || 0);
         });

@@ -1,5 +1,3 @@
-clean up bonuses earned/used display (use popup like score details)
-	add 13s penalty handling
 add a "cash out" button to end the game if you can't finish but have unused bonuses
 scrolling points scoring display
 
@@ -43,3 +41,5 @@ x implement scoring system
 		  that starts at 100. Opening 13 penalties are doubled (loss of two bonuses and
 		  skip 1 in the doubling penalty sequence).
 x score details popup
+x clean up bonuses earned/used display (use popup like score details)
+  x add 13s penalty handling

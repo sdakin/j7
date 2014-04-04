@@ -25,7 +25,7 @@ define(
     function J7App() {
         EventTarget.call(this);
 
-        // this.debugSpins = [ [1,2,3], [1,2,3], [2,2,5], [1,2,2], [5,2,1], [3,7,4] ];
+        this.debugSpins = [ [7,4,2], [1,2,3], [2,2,5], [1,2,2], [5,2,1], [3,7,4] ];
 
         this.numWheels = 3;
         this.wheels = [];
@@ -247,7 +247,8 @@ define(
             }
         }
 
-        var bonusNames = ["respins", "doubles", "increments", "decrements", "busts", "thirteens"];
+        var bonusNames = ["respins", "doubles", "increments", "decrements", 
+                          "busts", "thirteens", "opening13s"];
         bonusNames.forEach(function(name) {
             result.bonusesUsed += (self.stats[name] || 0);
         });
@@ -477,7 +478,7 @@ define(
         }
 
         var earnedNames = ["opening7s", "openingTriples", "triples", "upAndDown", "across"],
-            usedNames = ["respins", "doubles", "increments", "decrements", "busts", "thirteens"];
+            usedNames = ["respins", "doubles", "increments", "decrements", "busts"];
         var $statsUI;
 
         $statsUI = $(".earnedBonusDetails");
@@ -493,6 +494,7 @@ define(
         usedNames.forEach(function(name) {
             $statsUI.append(statLine(name, (self.stats[name] || 0)));
         });
+        $statsUI.append(statLine("thirteens", self.stats.opening13s + self.stats.thirteens));
         $statsUI.append(statLine("Total", bonusStats.bonusesUsed));
     };
 

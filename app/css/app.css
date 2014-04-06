@@ -156,16 +156,22 @@
 #scoreTicker {
 	position: absolute;
 	bottom: 10;
+	overflow-y: hidden;
 }
 
-.tickerText {
+.tickerTextFrame {
 	margin-left: 8px;
 	width: 301px;
 	height: 124px;
+	background-color: white;
+}
+
+.tickerText {
 	text-align: center;
 	font-size: 14px;
-	resize: none;
-	background-color: white;
+	width: 301;
+	position: absolute;
+	top: 52;
 }
 
 .statLine {

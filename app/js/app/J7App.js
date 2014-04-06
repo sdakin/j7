@@ -25,7 +25,7 @@ define(
     function J7App() {
         EventTarget.call(this);
 
-        this.debugSpins = [ [7,4,2], [1,2,3], [2,2,5], [1,2,2], [5,2,1], [3,7,4] ];
+        // this.debugSpins = [ [7,4,2], [1,2,3], [2,2,5], [1,2,2], [5,2,1], [3,7,4] ];
 
         this.numWheels = 3;
         this.wheels = [];
@@ -77,7 +77,8 @@ define(
     };
 
     J7App.prototype.onCashOut = function() {
-        debugger;
+        // TODO: show confirmation dialog
+        this.onGameOver();
     };
 
     J7App.prototype.onEndSpin = function() {
@@ -334,7 +335,7 @@ define(
                 if (bonusStats.bonusesEarned.total > bonusStats.bonusesUsed) {
                     gameOver = false;
                 } else {
-                    if (wheelsUsed == 0) {
+                    if (wheelsUsed === 0) {
                         var canPass = ($("#btnPass").attr("disabled") != "disabled");
                         if (canPass) {
                             gameOver = false;

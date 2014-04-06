@@ -31,17 +31,22 @@ define(["data/ScoreCounter"], function(ScoreCounter)
     ScoreView.prototype.addTickerText = function(spinNum, text) {
         var self = this;
         if (spinNum != self.spinNum) {
-            self.$tickerUI.val("");
+            self.clear();
             self.spinNum = spinNum;
         }
-        var tickerText = self.$tickerUI.val();
-        if (tickerText && tickerText.length > 0) tickerText += "\n";
-        tickerText += text;
-        self.$tickerUI.val(tickerText);
+
+        self.$tickerUI.append($('<div>' + text + '</div>'));
+        var frameHeight = $(".tickerTextFrame").height(),
+            textHeight = self.$tickerUI.height(), offset;
+        if (textHeight < frameHeight)
+            offset = (frameHeight - textHeight) / 2;
+        else
+            offset = frameHeight - textHeight;
+        self.$tickerUI.css("top", offset);
     };
 
     ScoreView.prototype.clear = function() {
-        this.$tickerUI.val("");
+        this.$tickerUI.empty();
     };
 
     ScoreView.prototype.handleOpeningBonusChanged = function(event) {

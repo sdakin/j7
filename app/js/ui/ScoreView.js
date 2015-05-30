@@ -49,6 +49,10 @@ define(["data/ScoreCounter"], function(ScoreCounter)
         this.$tickerUI.empty();
     };
 
+    ScoreView.prototype.getScore = function() {
+        return this.$scoreUI.text();
+    };
+
     ScoreView.prototype.handleOpeningBonusChanged = function(event) {
         if (event.bonus) {
             this.$bonusUI.show();

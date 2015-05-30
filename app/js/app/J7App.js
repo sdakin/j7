@@ -111,6 +111,8 @@ define(
         self.updateStats();
 
         // TODO: save the stats
+        var label = "score: " + self.scoreView.getScore() + ", spins: " + self.stats.spins;
+        ga('send', 'event', 'j7', 'gameCompleted', label);
 
         self.scoreView.addTickerText(self.stats.spins, "G A M E &nbsp; O V E R");
     };

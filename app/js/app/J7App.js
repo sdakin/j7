@@ -74,6 +74,7 @@ define(
         $(".inGameControls").show();
         $(".gameOverControls").hide();
         self.onSpin();
+        ga('send', 'event', 'j7', 'gameStarted');
     };
 
     J7App.prototype.onCashOut = function() {

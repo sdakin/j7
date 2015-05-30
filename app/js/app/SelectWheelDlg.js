@@ -70,7 +70,7 @@ define([], function()
                 $($wheelSelectors[i]).removeAttr("disabled");
         }
         this.$overlay.show();
-        var $rollArea = $(".rollArea");
+        var $rollArea = $(".rollarea");
         var offset = $rollArea.offset();
         offset.top -= 44;
         offset.left = 0;

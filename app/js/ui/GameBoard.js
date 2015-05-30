@@ -38,7 +38,7 @@ define(["ui/Cell"], function(Cell)
     };
 
     GameBoard.prototype.clearValidCells = function() {
-        var $validCells = $(".cellMarker.valid-Cell");
+        var $validCells = $(".cellMarker.valid-cell");
         $validCells.css("background-image", "");
         $validCells.removeClass("valid-cell");
     };

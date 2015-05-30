@@ -19,7 +19,7 @@ define([], function()
         function addScore(scoreDescription, scoreVal, always) {
             if (scoreVal !== 0 || always) {
                 var $line = '<div class="scoreLine">' +
-                                '<div class="scoreDesc">' + scoreDescription + '</div>' +
+                                '<div class="scoreDesc">' + scoreDescription + ' </div>' +
                                 '<div class="scoreVal">' + scoreVal + '</div>' +
                             '</div>';
                 $details.append($line);

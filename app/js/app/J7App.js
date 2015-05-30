@@ -112,7 +112,7 @@ define(
 
         // TODO: save the stats
 
-        self.scoreView.addTickerText(self.stats.spins, "G A M E   O V E R");
+        self.scoreView.addTickerText(self.stats.spins, "G A M E &nbsp; O V E R");
     };
 
     J7App.prototype.onCellClick = function(e) {
@@ -466,10 +466,14 @@ define(
         $("#bdgBonuses").text(bonusesAvailable);
         self.enableGameControls(bonusesAvailable > 0);
 
+        function prettifyName(name) {
+            return name.replace("opening", "opening ").replace("And", " and ").toLowerCase();
+        }
+
         // TODO: move this to the BonusDetailsDlg
         function statLine(name, val) {
             var line = $('<div class="statLine"><div class="statName"></div><div class="statVal"></div></div>');
-            line.find(".statName").text(name);
+            line.find(".statName").text(prettifyName(name));
             line.find(".statVal").text(val);
             if (name === "Total") {
                 line.find(".statName").css("border-top", "1px solid black");
